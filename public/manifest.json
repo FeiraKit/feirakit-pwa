@@ -1,13 +1,13 @@
 {
-  "name": "3:16 Burgers",
-  "short_name": "3:16 Burgers",
-  "description": "Cardápio digital da 3:16 Burgers com pedidos rápidos pelo WhatsApp.",
+  "name": "FeiraKit",
+  "short_name": "FeiraKit",
+  "description": "uma feira livre na palma da sua mão",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "lang": "pt-BR",
-  "background_color": "#0F0F0F",
-  "theme_color": "#FFD700",
+  "background_color": "#f2f2f2",
+  "theme_color": "#0d7f8c",
   "orientation": "portrait",
   "icons": [
     {
