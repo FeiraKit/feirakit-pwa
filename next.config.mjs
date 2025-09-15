@@ -21,9 +21,9 @@ const isDev = process.env.NODE_ENV !== "production";
 const withPWA = withPWAinit({
   disable: isDev,
   dest: "public",
-  register: true,
-  skipWaiting: true,
-  disableDevLogs: true,
+  // register: true,
+  // skipWaiting: true,
+  // disableDevLogs: true,
   exclude: [
     // add buildExcludes here
     ({ asset }) => {
