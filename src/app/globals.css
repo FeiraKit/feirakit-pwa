@@ -16,6 +16,11 @@
   --color-fk-green: #078c8c;
   --color-fk-primary: #0d7f8c;
   --Color-fk-text-default: #0f0802;
+  --color-fk-error-light: #fde2e2;
+  --color-fk-error: #fbb6b6;
+  --color-fk-error-dark: #f87171;
+  --color-fk-error-text: #b91c1c;
+  --color-fk-warning: #fff4e5;
 }
 
 @media (prefers-color-scheme: dark) {
