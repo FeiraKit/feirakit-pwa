@@ -11,8 +11,10 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function SignIn() {
+  const setUsuario = useAuthStore((state) => state.setUsuario);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
@@ -52,6 +54,7 @@ export default function SignIn() {
         return;
       }
       //persistir usuario no store
+      setUsuario(data.user);
       router.push("/");
 
       console.log(data);
