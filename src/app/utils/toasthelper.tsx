@@ -66,3 +66,14 @@ export function toastEmptyField(message: string) {
     theme: "colored",
   });
 }
+
+export function toastWrongCredentials(message: string) {
+  toast.error(`${message}`, {
+    position: "top-right",
+    autoClose: 10000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: "colored",
+  });
+}
