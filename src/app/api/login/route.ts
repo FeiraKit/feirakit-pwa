@@ -2,29 +2,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
-    // Chama sua API de autenticação
-    const res = await fetch("http://localhost:5000/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, senha: password }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok || !data.resultado) {
-      return NextResponse.json(
-        { result: false, message: data.mensagem ?? "Erro de login" },
-        { status: 401 }
-      );
-    }
-
-    const token = data.token;
+    const { token } = await request.json();
 
     const response = NextResponse.json({
-      result: data.resultado,
-      message: data.mensagem,
-      user: data.usuario,
+      result: true,
+      message: "Login bem-sucedido",
     });
 
     // seta o cookie HttpOnly

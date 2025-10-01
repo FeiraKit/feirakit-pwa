@@ -27,9 +27,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           type={inputType}
-          value={value ? value : ""}
+          defaultValue={value ? value : ""}
           {...props}
-          className={`border text-fk-primary border-gray-300 h-10 rounded-md w-full  outline-fk-primary placeholder:text-fk-primary/80 ${
+          className={`border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full  outline-fk-primary placeholder:text-gray-400 ${
             LeftIcon ? "pl-6" : "pl-2"
           }`}
         />

@@ -1,6 +1,17 @@
 "use client";
 import { toast } from "react-toastify";
 
+export function toastWellcome() {
+  toast.success(`Seja Bem vindo Ao Feira Kit`, {
+    position: "top-right",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: "colored",
+  });
+}
+
 export function toastAddToCart(name: string) {
   toast.success(`${name} adicionado ao pedido!`, {
     position: "top-right",
