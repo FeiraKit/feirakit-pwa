@@ -6,10 +6,14 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   LeftIcon?: ReactNode;
   divClass?: string;
+  imputClass?: string;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ LeftIcon, divClass, type, value, ...props }: InputProps, ref) => {
+  (
+    { LeftIcon, divClass, type, value, imputClass, ...props }: InputProps,
+    ref
+  ) => {
     const [visible, setVisible] = useState(false);
 
     const isPassword = type === "password";
@@ -22,7 +26,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         }`}
       >
         {LeftIcon && (
-          <span className="absolute  text-fk-primary left-1">{LeftIcon}</span>
+          <span className="absolute  text-fk-primary left-2">{LeftIcon}</span>
         )}
         <input
           ref={ref}
@@ -31,7 +35,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
           className={`border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full  outline-fk-primary placeholder:text-gray-400 ${
             LeftIcon ? "pl-6" : "pl-2"
-          }`}
+          } ${imputClass}`}
         />
 
         {isPassword && (
