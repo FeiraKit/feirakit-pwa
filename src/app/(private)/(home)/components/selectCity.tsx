@@ -1,26 +1,43 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaLocationDot, FaX } from "react-icons/fa6";
+import { useAuthStore } from "@/stores/useAuthStore";
 
-const cities = [
-  "São Paulo",
-  "Rio de Janeiro",
-  "Belo Horizonte",
-  "Salvador",
-  "Curitiba",
-  "Porto Alegre",
-  "Recife",
-  "Fortaleza",
-  "Brasília",
-  "Manaus",
-];
+const token = useAuthStore.getState().token;
 
-export function SelectCity() {
-  const [currentCity, setCurrentCity] = useState<string>("");
-  const [availableCities, setAvailableCities] = useState<string[]>(cities);
+async function getCities() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);
+  }
+
+  const data = await res.json(); // converte a resposta para JSON
+  return data.resultado || [];
+}
+
+type SelectCityProps = {
+  currentCity: string;
+  setCurrentCity: (city: string) => void;
+};
+
+export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
   const [showList, setShowList] = useState<boolean>(false);
   const WrapperCityDiv = useRef<HTMLDivElement>(null);
   const InputCity = useRef<HTMLInputElement>(null);
+
+  const { data, error, isFetching } = useQuery({
+    queryKey: ["CITIES"],
+    queryFn: getCities,
+  });
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
@@ -42,11 +59,19 @@ export function SelectCity() {
   }, []);
 
   const filterCities = (search: string) => {
-    const filtered = cities.filter((city) =>
+    const cities = data.map((item: { nome: string }) => item.nome);
+    const filtered = cities.filter((city: string) =>
       city.toLowerCase().includes(search.toLowerCase())
     );
     setAvailableCities(filtered);
   };
+  useEffect(() => {
+    if (data && !error) {
+      const fetchedCities = data.map((item: { nome: string }) => item.nome);
+
+      setAvailableCities(fetchedCities);
+    }
+  }, [data, error]);
 
   return (
     <div
@@ -85,6 +110,12 @@ export function SelectCity() {
           >
             <FaX className="h-6 w-6 text-fk-primary/80 active:text-fk-primary/60" />
           </div>
+          {isFetching && (
+            <div className="w-full text-center text-gray-400 py-4">
+              Carregando...
+            </div>
+          )}
+
           {availableCities.map((city) => (
             <div
               key={city}
@@ -103,9 +134,10 @@ export function SelectCity() {
               {city === currentCity && <FaCheck />}
             </div>
           ))}
-          {availableCities.length === 0 && (
+
+          {!isFetching && availableCities.length === 0 && (
             <div className="w-full text-center text-gray-400 py-4">
-              Nenhum produto nesta Cidade
+              Nenhum produto nesta cidade
             </div>
           )}
         </div>
