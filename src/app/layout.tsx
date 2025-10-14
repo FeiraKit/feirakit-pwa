@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import { CoreProvider } from "./components/core-provider";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat-sans",
@@ -25,7 +26,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${montserrat.variable} antialiased font-sans`}>
-        {children}
+        <CoreProvider>{children}</CoreProvider>
         <ToastContainer
           position="top-right"
           autoClose={2000}
