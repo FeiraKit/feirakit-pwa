@@ -96,6 +96,7 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
 
         <input
           ref={InputCity}
+          defaultValue={currentCity}
           onChange={(e) => filterCities(e.target.value)}
           className="ml-2 text-xl outline-0 ring-0"
           placeholder="Selecione sua cidade"

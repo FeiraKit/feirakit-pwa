@@ -8,7 +8,7 @@ import Input from "@/app/components/Input";
 import { FaSearch } from "react-icons/fa";
 import { SelectCity } from "./selectCity";
 import { FlatList } from "./flatlist";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Filters = {
   pageParam?: number;
@@ -47,7 +47,9 @@ export function Feed() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
 
   const { data, error, fetchNextPage, isFetchingNextPage, isPending } =
     useInfiniteQuery({
@@ -68,7 +70,26 @@ export function Feed() {
 
   const handleSearchTerm = (term: string) => {
     setSearchTerm(term);
+    if (term === "") {
+      params.delete("nome");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    params.set("nome", term);
     setSelectedCity("");
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSearchCity = (city: string) => {
+    setSelectedCity(city);
+    if (city === "") {
+      params.delete("cidade");
+      router.push(`?${params.toString()}`);
+      return;
+    }
+    params.set("cidade", city);
+    setSelectedCity("");
+    router.push(`?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -79,9 +100,17 @@ export function Feed() {
 
   useEffect(() => {
     const city = searchParams.get("cidade");
+    const seachTerm = searchParams.get("nome");
     if (city) {
       setSelectedCity(city);
       setSearchTerm("");
+      return;
+    }
+
+    if (seachTerm) {
+      setSearchTerm(seachTerm);
+      setSelectedCity("");
+      return;
     }
   }, [searchParams]);
 
@@ -120,7 +149,10 @@ export function Feed() {
           placeholder="Pesquisar"
         />
       </div>
-      <SelectCity currentCity={selectedCity} setCurrentCity={setSelectedCity} />
+      <SelectCity
+        currentCity={selectedCity}
+        setCurrentCity={handleSearchCity}
+      />
 
       <FlatList
         products={products}
