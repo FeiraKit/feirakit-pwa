@@ -4,11 +4,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { ProductType } from "./productItem";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
-import Input from "@/app/components/Input";
 import { FaSearch } from "react-icons/fa";
 import { SelectCity } from "./selectCity";
 import { FlatList } from "./flatlist";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SearchProductInput } from "./searchProductInput";
 
 type Filters = {
   pageParam?: number;
@@ -17,7 +17,6 @@ type Filters = {
 };
 
 async function fetcher({ pageParam, searchTerm, selectedCity }: Filters) {
-  console.log("fetcher called with:", { pageParam, searchTerm, selectedCity });
   let url = "";
 
   if (selectedCity) {
@@ -69,26 +68,29 @@ export function Feed() {
   }, [inView, fetchNextPage]);
 
   const handleSearchTerm = (term: string) => {
-    setSearchTerm(term);
-    if (term === "") {
+    const cleanTerm = term.replace(/[{}[\]*()&#@%<>\\/|"'$^]/g, "");
+    setSearchTerm(decodeURI(cleanTerm));
+    params.delete("cidade");
+    setSelectedCity("");
+    if (term === "" || cleanTerm === "") {
       params.delete("nome");
       router.push(`?${params.toString()}`);
       return;
     }
-    params.set("nome", term);
-    setSelectedCity("");
+    params.set("nome", encodeURIComponent(cleanTerm));
+
     router.push(`?${params.toString()}`);
   };
 
   const handleSearchCity = (city: string) => {
     setSelectedCity(city);
+    params.delete("nome");
     if (city === "") {
       params.delete("cidade");
       router.push(`?${params.toString()}`);
       return;
     }
     params.set("cidade", city);
-    setSelectedCity("");
     router.push(`?${params.toString()}`);
   };
 
@@ -100,52 +102,26 @@ export function Feed() {
 
   useEffect(() => {
     const city = searchParams.get("cidade");
-    const seachTerm = searchParams.get("nome");
+    const searchTerm = searchParams.get("nome");
+
     if (city) {
-      setSelectedCity(city);
+      setSelectedCity(decodeURI(city));
       setSearchTerm("");
-      return;
     }
 
-    if (seachTerm) {
-      setSearchTerm(seachTerm);
+    if (searchTerm) {
+      setSearchTerm(decodeURI(searchTerm));
       setSelectedCity("");
-      return;
     }
   }, [searchParams]);
-
-  if (isPending)
-    return (
-      <>
-        <div className="w-full flex items-center-safe justify-between max-w-lg gap-3">
-          <Input
-            LeftIcon={<FaSearch />}
-            imputClass="bg-gray-400/60"
-            placeholder="Pesquisar"
-          />
-        </div>
-        <SelectCity
-          currentCity={selectedCity}
-          setCurrentCity={setSelectedCity}
-        />
-
-        <div className="text-black">carregando...</div>
-      </>
-    );
-
-  if (error) return <div className="text-black">erro</div>;
-
-  if (data?.pages.length === 0)
-    return <div className="text-black">nenhum produto encontrado</div>;
 
   return (
     <>
       <div className="w-full flex items-center-safe justify-between max-w-lg gap-3">
-        <Input
+        <SearchProductInput
           LeftIcon={<FaSearch />}
           value={searchTerm}
-          imputClass="bg-gray-400/60"
-          onChange={(e) => handleSearchTerm(e.target.value)}
+          onChange={handleSearchTerm}
           placeholder="Pesquisar"
         />
       </div>
@@ -153,13 +129,26 @@ export function Feed() {
         currentCity={selectedCity}
         setCurrentCity={handleSearchCity}
       />
+      {error && (
+        <div className="text-red-500">Ocorreu um erro: {error.message}</div>
+      )}
 
-      <FlatList
-        products={products}
-        isInfiniteScroll={searchTerm === "" && selectedCity === ""}
-        isFetchingNextPage={isFetchingNextPage}
-        sentinelRef={ref}
-      />
+      {isPending && <div className="text-black">Carregando...</div>}
+
+      {data?.pages[0].length === 0 && !isPending && (
+        <div className="mb-4 text-gray-700">
+          {products.length} produto encontrado
+        </div>
+      )}
+
+      {!isPending && !error && data?.pages[0].length !== 0 && (
+        <FlatList
+          products={products}
+          isInfiniteScroll={searchTerm === "" && selectedCity === ""}
+          isFetchingNextPage={isFetchingNextPage}
+          sentinelRef={ref}
+        />
+      )}
     </>
   );
 }
