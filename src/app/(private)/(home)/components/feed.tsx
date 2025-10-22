@@ -1,6 +1,7 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { ProductType } from "./productItem";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
@@ -18,7 +19,6 @@ type Filters = {
 
 async function fetcher({ pageParam, searchTerm, selectedCity }: Filters) {
   let url = "";
-
   if (selectedCity) {
     searchTerm = "";
     url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?cidade=${selectedCity}`;
