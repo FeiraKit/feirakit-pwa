@@ -8,7 +8,7 @@ export default function BackButton() {
 
   return (
     <button
-      className="flex w-10 h-10 rounded-full border-4 border-fk-primary items-center justify-center fixed left-4"
+      className="flex w-10 h-10 rounded-full border-4 border-fk-primary items-center justify-center"
       onClick={() => router.back()}
     >
       <FaChevronLeft className="text-xl -ml-0.5 text-fk-primary" />
