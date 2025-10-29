@@ -2,7 +2,6 @@
 import { Productdetails } from "@/stores/useProductStore";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuthStore, User } from "@/stores/useAuthStore";
-import { link } from "fs";
 
 type WhatsappButtonProps = {
   quantity: number;
