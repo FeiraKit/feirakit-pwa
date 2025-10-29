@@ -28,7 +28,7 @@ export function Header({ showBackButton, showMenuButton }: HeaderProps) {
       </div>
 
       {showMenuButton && (
-        <button className="text-fk-primary active:text-fk-primary/40 absolute right-6">
+        <button className="text-fk-primary active:text-fk-primary/40 absolute right-0">
           <FaBars className="h-8 w-8" />
         </button>
       )}
