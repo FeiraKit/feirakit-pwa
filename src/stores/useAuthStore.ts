@@ -10,7 +10,7 @@ type Endereco = {
   estado: string;
 };
 
-type User = {
+export type User = {
   id: string;
   nome: string;
   email: string;

@@ -1,6 +1,8 @@
 "use client";
 import { Header } from "@/app/components/header";
 import { ImageGalery } from "@/app/components/imageGalery";
+import { QuantitySelector } from "@/app/components/quantitySelector";
+import { WhatsappButton } from "@/app/components/whatsappButton";
 import { useProductById } from "@/app/utils/useProductById";
 
 import { useParams } from "next/navigation";
@@ -15,6 +17,14 @@ export default function ProductPage() {
   const [showHeader, setShowHeader] = useState(true);
   const [bgHeader, setBgHeader] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncrease = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+  const handleDecrease = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,14 +50,6 @@ export default function ProductPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  if (!product || !product.seller.name) {
-    return (
-      <h2 className="text-red-700 text-2xl font-bold text-center">
-        Produto Indisponível
-      </h2>
-    );
-  }
-
   return (
     <div className="flex flex-col relative items-center min-h-screen  w-full max-w-screen px-6 pt-2 pb-30 bg-fk-background/90 ">
       <div
@@ -65,12 +67,18 @@ export default function ProductPage() {
       </div>
       {loading && <p>Carregando...</p>}
       {error && <p className="text-red-500">{error}</p>}
+      {!loading && product && !product?.seller?.name && (
+        <h2 className="text-red-700 text-2xl font-bold text-center">
+          Produto Indisponível
+        </h2>
+      )}
       {product && (
         <>
-          <section className="w-full flex flex-col mt-16 ">
+          <main className="w-full flex flex-col mt-16 ">
             <div className="w-full flex justify-center">
               <ImageGalery product={product} />
             </div>
+
             <div className="flex justify-between items-center mb-2  max-w-full overflow-y-auto">
               <h2 className="text-fk-primary text-2xl font-bold text-ellipsis overflow-hidden whitespace-nowrap max-w-[80%] flex">
                 {product.bestbefore && (
@@ -101,20 +109,39 @@ export default function ProductPage() {
                 </span>
               </div>
             </div>
-          </section>
-          <section className="w-full flex flex-col mt-4 mb-10 text-black font-normal">
-            <div className="flex text-md justify-between">
-              <p className="text-md">
-                categoria:{" "}
-                <span className="text-green-700">{product.categoria}</span>
-              </p>
-              <p>{product.validade}</p>
+
+            <section className="w-full flex flex-col mt-4 mb-10 text-black font-normal border border-gray-400 bg-gray-300 p-2 rounded-lg ">
+              <div className="flex text-md justify-between">
+                <p className="text-md">
+                  categoria:{" "}
+                  <span className="text-green-700">{product.categoria}</span>
+                </p>
+                <p>
+                  {new Date(product.validade).toLocaleDateString("pt-BR", {
+                    timeZone: "UTC",
+                  })}
+                </p>
+              </div>
+              {product.bestbefore && (
+                <p className="text-green-600">Colhido após a compra</p>
+              )}
+              <p className="leading-relaxed">{product.descricao}</p>
+            </section>
+            <p className="text-md text-gray-700 -mt-10  justify-self-start ">
+              Vendido Por{" "}
+              <span className="text-fk-green">{product.seller.name}</span>
+            </p>
+            <QuantitySelector
+              onDecrease={handleDecrease}
+              onIncrease={handleIncrease}
+              quantity={quantity}
+              unityType={product.unidade}
+            />
+
+            <div className="mt-6 mb-10 w-full">
+              <WhatsappButton quantity={quantity} product={product} />
             </div>
-            {product.bestbefore && (
-              <p className="text-green-600">Colhido após a compra</p>
-            )}
-            <p>{product.descricao}</p>
-          </section>
+          </main>
         </>
       )}
     </div>
