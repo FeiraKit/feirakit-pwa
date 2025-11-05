@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import { CoreProvider } from "./components/core-provider";
+import { DrawerMenu } from "./components/sideMenu/drawerMenu";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.variable} antialiased font-sans`}>
         <CoreProvider>{children}</CoreProvider>
+        <DrawerMenu />
         <ToastContainer
           position="top-right"
           autoClose={2000}

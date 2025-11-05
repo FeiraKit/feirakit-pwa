@@ -12,6 +12,17 @@ export function toastWellcome() {
   });
 }
 
+export function toastGoodBye() {
+  toast.info(`Obrigado Por Usar o Feira kit! Volte Sempre!`, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: "colored",
+  });
+}
+
 export function toastAddToCart(name: string) {
   toast.success(`${name} adicionado ao pedido!`, {
     position: "top-right",

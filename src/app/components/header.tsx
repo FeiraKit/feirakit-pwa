@@ -1,7 +1,8 @@
 import Image from "next/image";
 
 import BackButton from "./backButon";
-import { FaBars } from "react-icons/fa6";
+
+import { DrawerButton } from "./drawerButton";
 
 type HeaderProps = {
   showBackButton: boolean;
@@ -10,7 +11,7 @@ type HeaderProps = {
 
 export function Header({ showBackButton, showMenuButton }: HeaderProps) {
   return (
-    <header className="w-full h-16 flex items-center justify-center relative ">
+    <header className="w-full h-16 flex items-center justify-center relative">
       {showBackButton && (
         <div className="absolute left-0">
           <BackButton />
@@ -27,11 +28,7 @@ export function Header({ showBackButton, showMenuButton }: HeaderProps) {
         />
       </div>
 
-      {showMenuButton && (
-        <button className="text-fk-primary active:text-fk-primary/40 absolute right-0">
-          <FaBars className="h-8 w-8" />
-        </button>
-      )}
+      {showMenuButton && <DrawerButton />}
     </header>
   );
 }

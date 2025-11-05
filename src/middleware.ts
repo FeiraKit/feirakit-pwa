@@ -40,7 +40,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (authToken && !publicRoute) {
-    //validar jwt no futurp
+    //validar jwt no futuro
 
     return NextResponse.next();
   }
