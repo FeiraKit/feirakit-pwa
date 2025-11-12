@@ -2,6 +2,7 @@ type StepIndicatorProps = {
   customClass?: string;
   length: number;
   step: number;
+  fillDots?: true;
 };
 
 export function StepIndicator({

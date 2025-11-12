@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/app/components/form/registerForm/modal";
-import Step1 from "@/app/components/form/registerForm/step1";
+
 import * as z from "zod";
 
 import { Header } from "@/app/components/header";
@@ -11,8 +11,10 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { POLICY, TERMS } from "@/app/data/policyAndTerms";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Step1 from "@/app/components/form/registerForm/step1";
 import Step2 from "@/app/components/form/registerForm/step2";
 import Step3 from "@/app/components/form/registerForm/step3";
+
 import { toastWellcome, toastWrongCredentials } from "@/app/utils/toasthelper";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
