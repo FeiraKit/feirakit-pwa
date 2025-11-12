@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { Productdetails, useProductStore } from "@/stores/useProductStore";
 
-// ajuste o import conforme o seu projeto
-
 export function useProductById(id: string) {
   const addProduct = useProductStore((state) => state.setProducts);
 

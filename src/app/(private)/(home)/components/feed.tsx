@@ -82,7 +82,7 @@ export function Feed() {
     router.push(`?${params.toString()}`);
   };
 
-  const handleSearchCity = (city: string) => {
+  const getUrlSearchCity = (city: string) => {
     setSelectedCity(city);
     params.delete("nome");
     if (city === "") {
@@ -127,7 +127,7 @@ export function Feed() {
       </div>
       <SelectCity
         currentCity={selectedCity}
-        setCurrentCity={handleSearchCity}
+        setCurrentCity={getUrlSearchCity}
       />
       {error && (
         <div className="text-red-500">Ocorreu um erro: {error.message}</div>

@@ -26,6 +26,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>
+
       <body className={`${montserrat.variable} antialiased font-sans`}>
         <CoreProvider>{children}</CoreProvider>
         <DrawerMenu />
