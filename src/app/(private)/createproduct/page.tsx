@@ -16,8 +16,8 @@ import { Resume } from "./componenst/form/resume";
 import { FC } from "react";
 
 export const addProductSchema = z.object({
-  nome: z.string().min(1, { error: "Informe um título para o produto " }),
-  preco: z.number().min(0.1, { error: "Informe o valor para o produto" }),
+  nome: z.string().min(4, { error: "Informe um título para o produto " }),
+  preco: z.number().min(0.01, { error: "Informe o valor para o produto" }),
   estoque: z
     .number()
     .min(1, { error: "Quantos Produtos estarão disponíveis?" }),

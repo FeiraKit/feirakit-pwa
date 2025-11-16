@@ -3,7 +3,7 @@
 import { forwardRef, ReactNode, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   LeftIcon?: ReactNode;
   divClass?: string;
   imputClass?: string;
@@ -33,7 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={inputType}
           defaultValue={value ? value : ""}
           {...props}
-          className={`border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full  outline-fk-primary placeholder:text-gray-400 ${
+          className={`border-2   border-fk-primary/30 text-fk-primary outline-fk-primary h-10 rounded-md w-full   placeholder:text-gray-400 ${
             LeftIcon ? "pl-6" : "pl-2"
           } ${imputClass}`}
         />

@@ -5,9 +5,13 @@ import { useFormContext } from "react-hook-form";
 import { addProductFormData } from "../../page";
 import Input from "@/app/components/Input";
 
+import { Controller } from "react-hook-form";
+import { CurrencyInput } from "../CurrencyInput";
+
 export function Step1() {
   const username = useAuthStore((state) => state.usuario?.nome);
   const {
+    control,
     register,
     formState: { errors },
   } = useFormContext<addProductFormData>();
@@ -22,6 +26,28 @@ export function Step1() {
           Nome do produto:
         </label>
         <Input id="name" placeholder="nome do produto" {...register("nome")} />
+        {errors.nome && (
+          <span className="text-xs text-fk-error-text">
+            {errors.nome.message as string}
+          </span>
+        )}
+      </div>
+
+      <div>
+        <label className="mt-8 ml-4" htmlFor="nome">
+          Preço:
+        </label>
+
+        <Controller
+          name="preco"
+          control={control}
+          render={({ field }) => (
+            <CurrencyInput
+              RHFvalue={field.value}
+              RHFonChange={field.onChange}
+            />
+          )}
+        />
         {errors.nome && (
           <span className="text-xs text-fk-error-text">
             {errors.nome.message as string}
