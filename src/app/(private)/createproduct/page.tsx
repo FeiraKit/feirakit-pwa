@@ -14,16 +14,18 @@ import { Step3 } from "./componenst/form/step3";
 import { Step4 } from "./componenst/form/step4";
 import { Resume } from "./componenst/form/resume";
 import { FC } from "react";
+import { useProductConfig } from "@/app/utils/useProductConfig";
 
 export const addProductSchema = z.object({
   nome: z.string().min(4, { error: "Informe um título para o produto " }),
   preco: z.number().min(0.01, { error: "Informe o valor para o produto" }),
   estoque: z
-    .number()
-    .min(1, { error: "Quantos Produtos estarão disponíveis?" }),
+    .number({ error: "Quantos Produtos estarão disponíveis?" })
+    .int({ error: "Quantos Produtos estarão disponíveis?" })
+    .min(0, { error: "Quantos Produtos estarão disponíveis?" }),
   categoria: z.string().min(1, { error: "Informe a categoria deste produto " }),
   descricao: z.string().min(5, { error: "Fale sobre o produto" }),
-  unidade: z.string().min(1, { error: "Como esseproduto é vendido?" }),
+  unidade: z.string().min(1, { error: "Como esse produto é vendido?" }),
   cidades: z
     .array(z.string())
     .min(1, { error: "Em que cidade este Produto estará disponível?" }),
@@ -41,12 +43,12 @@ const stepFields = {
   2: ["descricao", "estoque", "bestbefore"],
   3: ["cidades"],
   4: ["imagem_url"],
-  5: ["resumo"],
 } as const;
 
 type StepKeys = keyof typeof stepFields;
 
 export default function CreateProduct() {
+  const { configs, loading, error } = useProductConfig();
   const user = useAuthStore((state) => state.usuario);
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -60,6 +62,10 @@ export default function CreateProduct() {
   });
 
   const handleNextStep = async () => {
+    const stepKey = step as StepKeys;
+    const fieldsOfStep = stepFields[stepKey];
+    const valid = await methods.trigger(fieldsOfStep);
+    if (!valid) return;
     setStep(step + 1);
   };
 
@@ -68,11 +74,14 @@ export default function CreateProduct() {
       <Header showBackButton showMenuButton />
       <section className="w-full flex flex-col items-center py-2 h-[85vh] text-black">
         <StepIndicator fillDots step={step} length={steps.length} />
-        <FormProvider {...methods}>
-          <div className="flex flex-col w-full flex-1 overflow-y-auto py-2 m-2">
-            {StepComponent && <StepComponent />}
-          </div>
-        </FormProvider>
+
+        {configs && (
+          <FormProvider {...methods}>
+            <div className="flex flex-col w-full flex-1 overflow-y-auto py-2 m-2">
+              {StepComponent && <StepComponent />}
+            </div>
+          </FormProvider>
+        )}
 
         <div className="flex gap-2 w-full p-6 justify-center">
           {step > 1 && (
