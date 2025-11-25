@@ -2,18 +2,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaLocationDot, FaX } from "react-icons/fa6";
-import { useAuthStore } from "@/stores/useAuthStore";
-
-const token = useAuthStore.getState().token;
-
+import { useProductConfigStore } from "@/stores/useProductConfigStore";
 async function getCities() {
+  const cidades = useProductConfigStore.getState().availableCities;
+  if (cidades.length > 0) {
+    return cidades.map((city) => ({ nome: city }));
+  }
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`,
-    {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    }
+    `${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`
   );
   if (!res.ok) {
     throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);

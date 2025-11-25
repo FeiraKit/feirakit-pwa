@@ -10,7 +10,7 @@ export function useProductConfig() {
   const setZustandConfigs = useProductConfigStore((state) => state.setConfigs);
   const zustandMeasures = useProductConfigStore((state) => state.measures);
   const zustandCategories = useProductConfigStore((state) => state.categories);
-
+  const zustandCities = useProductConfigStore((state) => state.availableCities);
   const isConfigsLoaded = useProductConfigStore((state) => state.loaded);
 
   const [configs, setConfigs] = useState<ProductUnites | null>(null);
@@ -22,6 +22,7 @@ export function useProductConfig() {
       const zustandConfigs = {
         medidas: zustandMeasures,
         categorias: zustandCategories,
+        cidades: zustandCities,
       };
 
       setConfigs(zustandConfigs);
@@ -32,22 +33,29 @@ export function useProductConfig() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/products/units`
-        );
 
-        if (!res.ok) {
-          throw new Error(`Houve um erro ao carregar o formulário`);
+        const [unitsRes, citiesRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/units`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`),
+        ]);
+
+        if (!unitsRes.ok || !citiesRes.ok) {
+          throw new Error(`Erro ao carregar configurações`);
         }
 
-        const data = await res.json();
-
-        setConfigs(data[0]);
+        const unitsData = await unitsRes.json();
+        const citiesData = await citiesRes.json();
+        const availableCities = citiesData.resultado.map(
+          (item: { nome: string }) => item.nome
+        );
 
         const configObject: ProductUnites = {
-          medidas: data[0].unidades,
-          categorias: data[0].categorias,
+          medidas: unitsData[0].unidades,
+          categorias: unitsData[0].categorias,
+          cidades: availableCities,
         };
+
+        setConfigs(configObject);
         setZustandConfigs(configObject);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
@@ -58,7 +66,13 @@ export function useProductConfig() {
       }
     };
     fetchConfigs();
-  }, [isConfigsLoaded, setZustandConfigs, zustandCategories, zustandMeasures]);
+  }, [
+    isConfigsLoaded,
+    setZustandConfigs,
+    zustandCategories,
+    zustandCities,
+    zustandMeasures,
+  ]);
 
   return { configs, loading, error };
 }

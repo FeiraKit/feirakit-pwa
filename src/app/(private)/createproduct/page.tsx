@@ -2,7 +2,7 @@
 import { Header } from "@/app/components/header";
 import { StepIndicator } from "@/app/components/stepIndicator";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,8 +27,8 @@ export const addProductSchema = z.object({
   descricao: z.string().min(5, { error: "Fale sobre o produto" }),
   unidade: z.string().min(1, { error: "Como esse produto é vendido?" }),
   cidades: z
-    .array(z.string())
-    .min(1, { error: "Em que cidade este Produto estará disponível?" }),
+    .array(z.string({ error: "Em que cidade este Produto estará disponível?" }))
+    .nonempty({ error: "Em que cidade este Produto estará disponível?" }),
   bestbefore: z.boolean().optional(),
   validade: z.string(),
   imagem_url: z
@@ -59,6 +59,9 @@ export default function CreateProduct() {
   const methods = useForm<addProductFormData>({
     resolver: zodResolver(addProductSchema),
     mode: "onChange",
+    defaultValues: {
+      cidades: [],
+    },
   });
 
   const handleNextStep = async () => {
@@ -68,6 +71,14 @@ export default function CreateProduct() {
     if (!valid) return;
     setStep(step + 1);
   };
+
+  useEffect(() => {
+    if (user?.endereco.cidade) {
+      methods.setValue("cidades", [user.endereco.cidade], {
+        shouldValidate: true,
+      });
+    }
+  }, [methods, user]);
 
   return (
     <div className="flex flex-col  items-center min-h-screen h-screen max-h-screen w-screen max-w-screen px-6 pt-2 pb-1 bg-fk-background/90">

@@ -89,6 +89,17 @@ export function toastEmptyField(message: string) {
   });
 }
 
+export function toastImagesLimit(message: string) {
+  toast.info(`${message}`, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: "colored",
+  });
+}
+
 export function toastWrongCredentials(message: string) {
   toast.error(`${message}`, {
     position: "top-right",

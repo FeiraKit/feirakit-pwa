@@ -6,7 +6,7 @@ import { ProductType } from "./productItem";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { SelectCity } from "./selectCity";
+import { SelectCity } from "../../../components/selectCity";
 import { FlatList } from "./flatlist";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchProductInput } from "./searchProductInput";
