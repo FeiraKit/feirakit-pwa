@@ -4,23 +4,18 @@ import Image from "next/image";
 
 import { useFormContext } from "react-hook-form";
 import { addProductFormData } from "../../page";
-import { useEffect } from "react";
 
 export function Resume() {
-  const { getValues, setValue } = useFormContext<addProductFormData>();
+  const { getValues } = useFormContext<addProductFormData>();
 
   const product = getValues();
-  useEffect(() => {
-    const today = new Date().toLocaleDateString("en-CA");
-    setValue("validade", today);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   return (
-    <div className="flex flex-1 flex-col ">
+    <div className="flex flex-1 flex-col overflow-hidden ">
       <h1 className=" text-xl text-black/90">
         Confira se as informações estão corretas antes de finalizar.
       </h1>
-      <section className="flex flex-1 flex-col overflow-scroll bg-gray-300">
+      <section className="flex flex-1 flex-col overflow-y-scroll bg-gray-300">
         <div className="w-full border border-fk-primary/90  max-h-2/6 rounded-lg mb-2 flex gap-2 flex-col p-1 rounded-b-none border-b-0 ">
           <div className="flex justify-between items-center mb-2"></div>
           <div className="w-full flex gap-1 px-2">

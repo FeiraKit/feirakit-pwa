@@ -56,6 +56,7 @@ export function Step4() {
     }, 200);
   };
   const canAddMore = images.length < keepImagesLimit;
+
   return (
     <div className="flex flex-1 flex-col ">
       <h1 className=" text-xl text-black/90">Adicione fotos do seu produto:</h1>

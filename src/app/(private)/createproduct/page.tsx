@@ -15,6 +15,7 @@ import { Step4 } from "./componenst/form/step4";
 import { Resume } from "./componenst/form/resume";
 import { FC } from "react";
 import { useProductConfig } from "@/app/utils/useProductConfig";
+import { uploadImages } from "@/app/utils/imageStorageService";
 
 export const addProductSchema = z.object({
   nome: z.string().min(4, { error: "Informe um título para o produto " }),
@@ -72,12 +73,33 @@ export default function CreateProduct() {
     setStep(step + 1);
   };
 
+  const handleSubmitForm = async (data: addProductFormData) => {
+    const slug = data.nome
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    // upload das imagens
+    const uploadedImages: string[] = await uploadImages({
+      blobsUrls: data.imagem_url,
+      slugProduct: slug,
+    });
+    data.imagem_url = uploadedImages;
+    methods.setValue("imagem_url", uploadedImages);
+    console.log(uploadedImages);
+
+    // substituir URLs temporárias pelos URLs retornados pelo servidor
+    // envio dos dados do produto para o servidor
+  };
+
   useEffect(() => {
     if (user?.endereco.cidade) {
       methods.setValue("cidades", [user.endereco.cidade], {
         shouldValidate: true,
       });
     }
+
+    const today = new Date().toLocaleDateString("en-CA");
+    methods.setValue("validade", today);
   }, [methods, user]);
 
   return (
@@ -106,7 +128,9 @@ export default function CreateProduct() {
 
           <button
             onClick={
-              step !== steps.length ? handleNextStep : () => console.log("buu")
+              step !== steps.length
+                ? handleNextStep
+                : methods.handleSubmit(handleSubmitForm)
             }
             className="w-full h-10 rounded-md bg-fk-primary text-fk-background font-bold"
           >
