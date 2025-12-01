@@ -59,7 +59,21 @@ export async function uploadImages({
   return [...finalUrls, ...uploadedUrls];
 }
 
-export function deleteImage(imageUrl: string): Promise<void> {
-  const storageRef = storage.refFromURL(imageUrl);
-  return storageRef.delete();
+export async function deleteImage(imageUrls: string[]): Promise<void> {
+  if (!imageUrls || imageUrls.length === 0) return;
+
+  const deleteTasks = imageUrls.map(async (url) => {
+    try {
+      const storageRef = storage.refFromURL(url);
+      await storageRef.delete();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.code === "storage/object-not-found") {
+        console.log("Imagem já não existia:", url);
+        return;
+      }
+    }
+  });
+
+  await Promise.all(deleteTasks);
 }

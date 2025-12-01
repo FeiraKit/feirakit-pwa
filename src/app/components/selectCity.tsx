@@ -1,24 +1,9 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaLocationDot, FaX } from "react-icons/fa6";
-import { useProductConfigStore } from "@/stores/useProductConfigStore";
-async function getCities() {
-  const cidades = useProductConfigStore.getState().availableCities;
-  if (cidades.length > 0) {
-    return cidades.map((city) => ({ nome: city }));
-  }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`
-  );
-  if (!res.ok) {
-    throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);
-  }
-
-  const data = await res.json(); // converte a resposta para JSON
-  return data.resultado || [];
-}
+import { useProductConfig } from "../utils/useProductConfig";
 
 type SelectCityProps = {
   currentCity: string;
@@ -26,15 +11,11 @@ type SelectCityProps = {
 };
 
 export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
+  const { configs, loading } = useProductConfig();
   const [availableCities, setAvailableCities] = useState<string[]>([]);
   const [showList, setShowList] = useState<boolean>(false);
   const WrapperCityDiv = useRef<HTMLDivElement>(null);
   const InputCity = useRef<HTMLInputElement>(null);
-
-  const { data, error, isFetching } = useQuery({
-    queryKey: ["CITIES"],
-    queryFn: getCities,
-  });
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent | TouchEvent) {
@@ -56,19 +37,19 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
   }, []);
 
   const filterCities = (search: string) => {
-    const cities = data.map((item: { nome: string }) => item.nome);
+    if (!configs) {
+      return;
+    }
+    const cities = configs.cidades.map((item) => item);
     const filtered = cities.filter((city: string) =>
       city.toLowerCase().includes(search.toLowerCase())
     );
     setAvailableCities(filtered);
   };
   useEffect(() => {
-    if (data && !error) {
-      const fetchedCities = data.map((item: { nome: string }) => item.nome);
-
-      setAvailableCities(fetchedCities);
-    }
-  }, [data, error]);
+    if (!configs) return;
+    setAvailableCities(configs.cidades);
+  }, [configs]);
 
   return (
     <div
@@ -108,7 +89,7 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
           >
             <FaX className="h-6 w-6 text-fk-primary/80 active:text-fk-primary/60" />
           </div>
-          {isFetching && (
+          {loading && (
             <div className="w-full text-center text-gray-400 py-4">
               Carregando...
             </div>
@@ -133,7 +114,7 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
             </div>
           ))}
 
-          {!isFetching && availableCities.length === 0 && (
+          {!loading && availableCities.length === 0 && (
             <div className="w-full text-center text-gray-400 py-4">
               Nenhum produto nesta cidade
             </div>

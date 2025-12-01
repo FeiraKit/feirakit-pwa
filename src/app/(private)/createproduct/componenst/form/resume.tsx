@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { useFormContext } from "react-hook-form";
-import { addProductFormData } from "../../page";
+import { addProductFormData } from "@/types/forms/addProductFormData";
 
 export function Resume() {
   const { getValues } = useFormContext<addProductFormData>();

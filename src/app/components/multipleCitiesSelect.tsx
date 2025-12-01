@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaPlus } from "react-icons/fa";
 
 type MultipleSelectProps = {
@@ -11,7 +11,7 @@ type MultipleSelectProps = {
   setSelectedCities: (cities: string[]) => void;
 };
 
-export function MultipleSelect({
+export function MultipleCitiesSelect({
   citiesOptions,
   selectedCities,
   setSelectedCities,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { addProductFormData } from "../../page";
+import { addProductFormData } from "@/types/forms/addProductFormData";
 import { useState } from "react";
 import { FcAddImage } from "react-icons/fc";
 import Image from "next/image";

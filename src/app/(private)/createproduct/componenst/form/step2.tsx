@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { addProductFormData } from "../../page";
+import { addProductFormData } from "@/types/forms/addProductFormData";
 import Input from "@/app/components/Input";
 
 import { Label } from "@/app/components/Label";
@@ -57,7 +57,7 @@ export function Step2() {
               {...register("bestbefore")}
             />
             <label htmlFor="bestbefore" className="ml-2 text-xl text-gray-800">
-              O produto será Colhido/fabricado por encomenda
+              O produto será colhido/fabricado por encomenda
             </label>
           </div>
 

@@ -6,7 +6,7 @@ import { EmptyList } from "./components/emptyList";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { ProductType } from "../(home)/components/productItem";
-import { useEffect } from "react";
+
 import { MyProductItem } from "./components/myProductItem";
 import { AddNewProduct } from "./components/AddNewProduct";
 
@@ -53,7 +53,7 @@ export default function MyProducts() {
         ) : (
           data?.map((product) => (
             <MyProductItem
-              imageUrl={product.imagem_url[0]}
+              imageUrl={product.imagem_url}
               name={product.nome}
               price={product.preco}
               quantity={product.estoque}

@@ -1,10 +1,10 @@
 "use client";
 
 import { Controller, useFormContext } from "react-hook-form";
-import { addProductFormData } from "../../page";
+import { addProductFormData } from "@/types/forms/addProductFormData";
 
 import { Label } from "@/app/components/Label";
-import { MultipleSelect } from "@/app/components/multipleSelect";
+import { MultipleCitiesSelect } from "@/app/components/multipleCitiesSelect";
 import { useProductConfigStore } from "@/stores/useProductConfigStore";
 import { useState } from "react";
 import { SelectedCityItem } from "../selectedCityItem";
@@ -50,7 +50,7 @@ export function Step3() {
             name="cidades"
             control={control}
             render={({ field }) => (
-              <MultipleSelect
+              <MultipleCitiesSelect
                 selectedCities={selectedCities}
                 citiesOptions={availableCities}
                 setSelectedCities={setSelectedCities}

@@ -11,7 +11,15 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { LeftIcon, divClass, type, value, imputClass, ...props }: InputProps,
+    {
+      LeftIcon,
+      divClass,
+      type,
+      value,
+      imputClass,
+
+      ...props
+    }: InputProps,
     ref
   ) => {
     const [visible, setVisible] = useState(false);

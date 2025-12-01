@@ -5,11 +5,16 @@ import { useEffect, useState } from "react";
 type CurencyInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   RHFvalue: number | undefined;
   RHFonChange: (arg0: number) => void;
+  custonClasses?: string;
 };
 
 const DECIMAL_SIZE = 2;
 
-export function CurrencyInput({ RHFvalue, RHFonChange }: CurencyInputProps) {
+export function CurrencyInput({
+  RHFvalue,
+  RHFonChange,
+  custonClasses,
+}: CurencyInputProps) {
   const [value, setValue] = useState<number | undefined>(RHFvalue);
   const [displayValue, setDisplayValue] = useState<string>("");
 
@@ -38,7 +43,13 @@ export function CurrencyInput({ RHFvalue, RHFonChange }: CurencyInputProps) {
   }, [value]);
 
   return (
-    <div className="flex border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full   placeholder:text-gray-400 pl-2 items-center focus-within:border-fk-primary ">
+    <div
+      className={
+        custonClasses
+          ? custonClasses
+          : "flex border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full  placeholder:text-gray-400 pl-2 items-center focus-within:border-fk-primary "
+      }
+    >
       <div className="mr-1">
         <span>R$</span>
       </div>
@@ -49,7 +60,7 @@ export function CurrencyInput({ RHFvalue, RHFonChange }: CurencyInputProps) {
           handleValue(e.target.value);
         }}
         value={displayValue}
-        className="placeholder:text-gray-400 outline-none"
+        className="placeholder:text-gray-400 flex w-full outline-none"
       />
     </div>
   );

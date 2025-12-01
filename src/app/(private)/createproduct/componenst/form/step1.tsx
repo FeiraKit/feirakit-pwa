@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useFormContext } from "react-hook-form";
-import { addProductFormData } from "../../page";
+import { addProductFormData } from "@/types/forms/addProductFormData";
 import Input from "@/app/components/Input";
 
 import { Controller } from "react-hook-form";

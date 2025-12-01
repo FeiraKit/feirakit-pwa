@@ -9,7 +9,7 @@ export function useProductById(id: string) {
   const zustandProducts = useProductStore((state) => state.products);
 
   const [product, setProduct] = useState<Productdetails | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export function useProductById(id: string) {
         return;
       }
       try {
-        setLoading(true);
         setError(null);
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`

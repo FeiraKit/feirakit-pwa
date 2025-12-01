@@ -16,28 +16,12 @@ import { Resume } from "./componenst/form/resume";
 import { FC } from "react";
 import { useProductConfig } from "@/app/utils/useProductConfig";
 import { uploadImages } from "@/app/utils/imageStorageService";
-
-export const addProductSchema = z.object({
-  nome: z.string().min(4, { error: "Informe um título para o produto " }),
-  preco: z.number().min(0.01, { error: "Informe o valor para o produto" }),
-  estoque: z
-    .number({ error: "Quantos Produtos estarão disponíveis?" })
-    .int({ error: "Quantos Produtos estarão disponíveis?" })
-    .min(0, { error: "Quantos Produtos estarão disponíveis?" }),
-  categoria: z.string().min(1, { error: "Informe a categoria deste produto " }),
-  descricao: z.string().min(5, { error: "Fale sobre o produto" }),
-  unidade: z.string().min(1, { error: "Como esse produto é vendido?" }),
-  cidades: z
-    .array(z.string({ error: "Em que cidade este Produto estará disponível?" }))
-    .nonempty({ error: "Em que cidade este Produto estará disponível?" }),
-  bestbefore: z.boolean().optional(),
-  validade: z.string(),
-  imagem_url: z
-    .array(z.string())
-    .min(1, { error: "Adicione fotos do produto" }),
-});
-
-export type addProductFormData = z.infer<typeof addProductSchema>;
+import {
+  addProductFormData,
+  addProductSchema,
+} from "@/types/forms/addProductFormData";
+import { createProduct } from "@/sevices/ProductServices";
+import { toastAddToCart } from "@/app/utils/toasthelper";
 
 const stepFields = {
   1: ["nome", "preco", "categoria", "unidade"],
@@ -53,6 +37,7 @@ export default function CreateProduct() {
   const user = useAuthStore((state) => state.usuario);
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [isSavingProduct, setIsSavingProduct] = useState(false);
 
   const steps: FC[] = [Step1, Step2, Step3, Step4, Resume];
   const StepComponent = steps[step - 1] ?? null;
@@ -74,21 +59,23 @@ export default function CreateProduct() {
   };
 
   const handleSubmitForm = async (data: addProductFormData) => {
+    setIsSavingProduct(true);
     const slug = data.nome
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
-    // upload das imagens
+
     const uploadedImages: string[] = await uploadImages({
       blobsUrls: data.imagem_url,
       slugProduct: slug,
     });
     data.imagem_url = uploadedImages;
     methods.setValue("imagem_url", uploadedImages);
-    console.log(uploadedImages);
 
-    // substituir URLs temporárias pelos URLs retornados pelo servidor
-    // envio dos dados do produto para o servidor
+    await createProduct(data);
+    setIsSavingProduct(false);
+    toastAddToCart("Produto criado com sucesso!");
+    router.push("/myproducts");
   };
 
   useEffect(() => {
@@ -96,6 +83,10 @@ export default function CreateProduct() {
       methods.setValue("cidades", [user.endereco.cidade], {
         shouldValidate: true,
       });
+    }
+
+    if (user?.id) {
+      methods.setValue("produtor_id", user.id);
     }
 
     const today = new Date().toLocaleDateString("en-CA");
@@ -107,7 +98,11 @@ export default function CreateProduct() {
       <Header showBackButton showMenuButton />
       <section className="w-full flex flex-col items-center py-2 h-[85vh] text-black">
         <StepIndicator fillDots step={step} length={steps.length} />
-
+        {isSavingProduct && (
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+            <p className="text-xl font-semibold">Salvando Produto...</p>
+          </div>
+        )}
         {configs && (
           <FormProvider {...methods}>
             <div className="flex flex-col w-full flex-1 overflow-y-auto py-2 m-2">
