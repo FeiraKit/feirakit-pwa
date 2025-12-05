@@ -4,7 +4,7 @@ import Input from "../../Input";
 import { PatternFormat } from "react-number-format";
 import { BRAZILIAN_STATES } from "@/app/data/states";
 import { useFormContext } from "react-hook-form";
-import { RegisterFormData } from "@/types/forms/userForm";
+import { RegisterFormData } from "@/types/forms/userTypes";
 
 export default function Step2({}) {
   const {

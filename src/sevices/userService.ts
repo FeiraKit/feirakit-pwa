@@ -1,23 +1,29 @@
 import {
   CreateUserDTO,
+  CreateUserResponse,
   LoginDTO,
-  RegisterFormData,
-} from "@/types/forms/userForm";
+  LoginResponse,
+  UpdateUserResponse,
+  updtateUserDTO,
+} from "@/types/forms/userTypes";
 import { api } from "@/lib/api";
 
 export function createUser(data: CreateUserDTO) {
-  return api("/users", { method: "POST", body: JSON.stringify(data) });
-}
-
-export function signIn(data: LoginDTO) {
-  return api("/users/login", {
+  return api<CreateUserResponse>("/users", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export function updateUser(data: RegisterFormData) {
-  return api("/users", {
+export function signIn(data: LoginDTO) {
+  return api<LoginResponse>("/users/login", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateUser(data: updtateUserDTO) {
+  return api<UpdateUserResponse>("/users", {
     method: "PUT",
     body: JSON.stringify(data),
   });

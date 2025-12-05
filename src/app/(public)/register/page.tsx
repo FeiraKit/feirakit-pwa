@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Step1 from "@/app/components/form/registerForm/step1";
 import Step2 from "@/app/components/form/registerForm/step2";
 import Step3 from "@/app/components/form/registerForm/step3";
-import { RegisterFormData, registerSchema } from "@/types/forms/userForm";
+import { RegisterFormData, registerSchema } from "@/types/forms/userTypes";
 import { useCreateUser } from "@/hooks/users/useCreateUser";
 
 const stepFields = {

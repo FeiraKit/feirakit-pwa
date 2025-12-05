@@ -51,6 +51,10 @@ export type LoginDTO = {
   senha: string;
 };
 
+export type updtateUserDTO = CreateUserDTO & {
+  id: string;
+};
+
 export const updateUserSchema = z.object({
   nome: z.string().min(2, { message: "Nome deve ter no mínimo 3 caracteres" }),
   email: z.email({ message: "E-mail inválido" }),
@@ -67,3 +71,42 @@ export const updateUserSchema = z.object({
 });
 
 export type updateUserFormData = z.infer<typeof updateUserSchema>;
+
+export type Endereco = {
+  rua: string;
+  numero: string;
+  bairro: string;
+  cep: string;
+  complemento: string;
+  cidade: string;
+  estado: string;
+};
+
+export type Usuario = {
+  id: string;
+  nome: string;
+  email: string;
+  telefone: string;
+  endereco: Endereco;
+};
+
+export type LoginResponse = {
+  resultado: boolean;
+  token: string;
+  mensagem: string;
+  usuario: Usuario;
+};
+
+export type CreateUserResponse = {
+  resultado: boolean;
+  mensagem: string;
+  token: string;
+  usuario: Usuario;
+};
+
+export type UpdateUserResponse = {
+  resultado: boolean;
+  usuario: Usuario;
+  token: string;
+  mensagem: string;
+};

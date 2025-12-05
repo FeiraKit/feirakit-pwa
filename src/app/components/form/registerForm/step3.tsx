@@ -5,7 +5,7 @@ import { FaWhatsapp } from "react-icons/fa6";
 import Input from "../../Input";
 import { PatternFormat } from "react-number-format";
 import { useFormContext } from "react-hook-form";
-import { RegisterFormData } from "@/types/forms/userForm";
+import { RegisterFormData } from "@/types/forms/userTypes";
 
 type Step3Props = {
   openTermsModal: () => void;
