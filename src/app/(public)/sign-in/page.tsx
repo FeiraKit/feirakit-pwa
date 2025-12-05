@@ -14,6 +14,7 @@ import { FaLock, FaUser } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Header } from "@/app/components/header";
+import { useSignIn } from "@/hooks/users/useSignIn";
 
 export default function SignIn() {
   const setUsuario = useAuthStore((state) => state.setUsuario);
@@ -23,6 +24,8 @@ export default function SignIn() {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const signIn = useSignIn();
 
   const HandleSignIn = async () => {
     if (!email) {
@@ -36,66 +39,58 @@ export default function SignIn() {
       return;
     }
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
-        {
+    const credentials = { email, senha: password };
+
+    signIn.mutate(credentials, {
+      onSuccess: async (data) => {
+        const login = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, senha: password }),
+          body: JSON.stringify({ token: data.token }),
+        });
+
+        const loginData = await login.json();
+        if (!loginData.result) {
+          toastWrongCredentials(
+            "Desculpe, tivemos um problema ao verificar seus dados, tente novamente."
+          );
+          return;
         }
-      );
+        //persistir usuario no store
+        setUsuario(data.usuario);
+        setToken(data.token);
+        toastWellcome();
+        router.push("/");
+      },
+      onError: (e) => {
+        console.log(e);
 
-      const data = await res.json();
+        if (e.message === "Email não cadastrado") {
+          emailRef.current?.focus();
+          toastEmptyField("Não encontramos uma conta com esse e-mail.");
+          return;
+        }
 
-      if (!data.resultado && data.mensagem == "Email não cadastrado") {
-        emailRef.current?.focus();
-        toastEmptyField("Não encontramos uma conta com esse e-mail.");
-        return;
-      }
+        if (e.message === "Senha inválida") {
+          passwordRef.current?.focus();
+          toastEmptyField("A senha informada está incorreta.");
+          return;
+        }
 
-      if (!data.resultado && data.mensagem == "Senha inválida") {
-        passwordRef.current?.focus();
-        toastEmptyField("A senha informada está incorreta.");
-        return;
-      }
-
-      if (
-        !data.resultado &&
-        data.menssagem ==
+        if (
+          e.message ===
           "Não foi possível conectar ao servidor. Verifique sua internet."
-      ) {
-        passwordRef.current?.focus();
-        toastEmptyField(
-          "Desculpe, tivemos um problema ao verificar seus dados, tente novamente."
-        );
-        return;
-      }
+        ) {
+          emailRef.current?.focus();
+          toastEmptyField(e.message);
+          return;
+        }
 
-      const login = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: data.token }),
-      });
-
-      const loginData = await login.json();
-      if (!loginData.result) {
         toastWrongCredentials(
-          "Desculpe, tivemos um problema ao verificar seus dados, tente novamente."
+          "Não foi possivel conectar ao servidor, tente novamente mais tarde"
         );
-        return;
-      }
-      //persistir usuario no store
-      setUsuario(data.usuario);
-      setToken(data.token);
-      toastWellcome();
-      router.push("/");
-    } catch (e) {
-      console.log(e);
-      toastWrongCredentials(
-        "Não foi possivel conectar ao servidor, tente novamente mais tarde"
-      );
-    }
+      },
+    });
   };
 
   return (
@@ -120,7 +115,7 @@ export default function SignIn() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <span className="text-xs text-black">Esqueci minha senha</span>
+        {/* <span className="text-xs text-black">Esqueci minha senha</span> */}
 
         <BaseButton
           text="Entrar"

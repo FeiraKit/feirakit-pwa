@@ -46,6 +46,11 @@ export type CreateUserDTO = {
   };
 };
 
+export type LoginDTO = {
+  email: string;
+  senha: string;
+};
+
 export const updateUserSchema = z.object({
   nome: z.string().min(2, { message: "Nome deve ter no mínimo 3 caracteres" }),
   email: z.email({ message: "E-mail inválido" }),
