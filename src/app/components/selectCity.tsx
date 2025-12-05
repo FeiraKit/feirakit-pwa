@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaLocationDot, FaX } from "react-icons/fa6";
 
-import { useProductConfig } from "../utils/useProductConfig";
+import { useProductConfig } from "../../hooks/useProductConfig";
 
 type SelectCityProps = {
   currentCity: string;

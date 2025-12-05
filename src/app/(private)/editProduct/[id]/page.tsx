@@ -3,7 +3,7 @@
 import { Header } from "@/app/components/header";
 
 import { MultipleCitiesSelect } from "@/app/components/multipleCitiesSelect";
-import { useProductById } from "@/app/utils/useProductById";
+import { useProductById } from "@/hooks/useProductById";
 import { useParams } from "next/navigation";
 import { CurrencyInput } from "../../createproduct/componenst/CurrencyInput";
 import { useEffect, useRef, useState } from "react";
@@ -16,7 +16,7 @@ import {
   addProductSchema,
 } from "@/types/forms/addProductFormData";
 import { FcAddImage } from "react-icons/fc";
-import { useProductConfig } from "@/app/utils/useProductConfig";
+import { useProductConfig } from "@/hooks/useProductConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { deleteImage, uploadImages } from "@/app/utils/imageStorageService";
 import { updateProduct } from "@/sevices/ProductServices";
@@ -37,9 +37,7 @@ export default function EditProductPage() {
   const [showCitiesPicker, setShowcitiespicker] = useState(false);
   const [currentImages, setCurrentImages] = useState<string[]>([]);
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
-  const [selectedCities, setSelectedCities] = useState<string[]>(
-    methods.getValues("cidades")
-  );
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [isSavingProduct, setIsSavingProduct] = useState(false);
   const categories = configs?.categorias;
   const measures = configs?.medidas;
@@ -91,6 +89,7 @@ export default function EditProductPage() {
     });
     setCurrentImages(product.imagem_url);
     setSelectedCities(product.cidades);
+
     const today = new Date().toLocaleDateString("en-CA");
     methods.setValue("validade", today);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,7 +139,7 @@ export default function EditProductPage() {
     methods.setValue("imagem_url", newImages, { shouldValidate: true });
   };
   return (
-    <div className="flex flex-col  items-center min-h-screen h-screen max-h-screen w-screen max-w-screen px-6  bg-fk-background/90 text-black pb-16 ">
+    <div className="flex flex-col  items-center min-h-screen h-screen max-h-screen w-screen max-w-screen px-6  bg-fk-background/90 text-black pb-4 ">
       {isSavingProduct && (
         <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
           <p className="text-xl font-semibold">Salvando Produto...</p>

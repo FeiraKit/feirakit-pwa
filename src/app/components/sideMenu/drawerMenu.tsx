@@ -35,7 +35,7 @@ const DrawerLinks = [
   },
   {
     key: 4,
-    url: "/myaccount",
+    url: "/myprofile",
     icon: <FaUserCircle className="h-6 w-6" />,
     Label: "Meu perfil",
   },

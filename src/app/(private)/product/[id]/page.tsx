@@ -3,7 +3,7 @@ import { Header } from "@/app/components/header";
 import { ImageGalery } from "@/app/components/imageGalery";
 import { QuantitySelector } from "@/app/components/quantitySelector";
 import { WhatsappButton } from "@/app/components/whatsappButton";
-import { useProductById } from "@/app/utils/useProductById";
+import { useProductById } from "@/hooks/useProductById";
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";

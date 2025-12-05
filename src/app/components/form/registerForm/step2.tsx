@@ -4,7 +4,7 @@ import Input from "../../Input";
 import { PatternFormat } from "react-number-format";
 import { BRAZILIAN_STATES } from "@/app/data/states";
 import { useFormContext } from "react-hook-form";
-import { RegisterFormData } from "@/app/(public)/register/page";
+import { RegisterFormData } from "@/types/forms/userForm";
 
 export default function Step2({}) {
   const {
@@ -50,6 +50,7 @@ export default function Step2({}) {
       console.error("Erro ao buscar CEP:", error);
     }
   };
+
   return (
     <div className="flex flex-col  w-full px-6">
       <label className="mt-8" htmlFor="zipcode">

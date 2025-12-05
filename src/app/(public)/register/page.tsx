@@ -2,8 +2,6 @@
 
 import Modal from "@/app/components/form/registerForm/modal";
 
-import * as z from "zod";
-
 import { Header } from "@/app/components/header";
 import { StepIndicator } from "@/app/components/stepIndicator";
 import { useState } from "react";
@@ -14,38 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Step1 from "@/app/components/form/registerForm/step1";
 import Step2 from "@/app/components/form/registerForm/step2";
 import Step3 from "@/app/components/form/registerForm/step3";
-
-import { toastWellcome, toastWrongCredentials } from "@/app/utils/toasthelper";
-import { useAuthStore } from "@/stores/useAuthStore";
-import { useRouter } from "next/navigation";
-
-export const registerSchema = z
-  .object({
-    nome: z
-      .string()
-      .min(2, { message: "Nome deve ter no mínimo 3 caracteres" }),
-    email: z.email({ message: "E-mail inválido" }),
-    senha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-    confirmasenha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-    telefone: z.string().min(10, "Telefone inválido"),
-    endereco: z.object({
-      rua: z.string().min(1, "informe o nome da rua"),
-      numero: z.string().min(1, "informe o numero"),
-      bairro: z.string().min(1, "informe o nome do bairro"),
-      cep: z.string().min(8, "informe um CEP válido"),
-      complemento: z.string().optional(),
-      cidade: z.string().min(1, "informe o nome da cidade"),
-      estado: z.string().min(2, "informe o nome do estado"),
-    }),
-    acceptTerm: z.boolean().refine((val) => val, "Você deve aceitar os termos"),
-    acceptPolicy: z
-      .boolean()
-      .refine((val) => val, "Você deve aceitar a política"),
-  })
-  .refine((data) => data.senha === data.confirmasenha, {
-    message: "As senhas não coincidem",
-    path: ["confirmasenha"],
-  });
+import { RegisterFormData, registerSchema } from "@/types/forms/userForm";
+import { useCreateUser } from "@/hooks/users/useCreateUser";
 
 const stepFields = {
   1: ["nome", "email", "senha", "confirmasenha"],
@@ -62,16 +30,12 @@ const stepFields = {
 } as const;
 type StepKeys = keyof typeof stepFields;
 
-export type RegisterFormData = z.infer<typeof registerSchema>;
-
 export default function Register() {
   const [step, setStep] = useState<number>(1);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<"terms" | "policy">("terms");
-  const setUsuario = useAuthStore((state) => state.setUsuario);
-  const setToken = useAuthStore((state) => state.setToken);
-  const router = useRouter();
 
+  const createUser = useCreateUser();
   const closeModal = () => {
     setOpenModal(!openModal);
   };
@@ -127,45 +91,17 @@ export default function Register() {
       },
     };
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
-
-      const data = await res.json();
-
-      const login = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: data.token }),
-      });
-
-      const loginData = await login.json();
-      if (!loginData.result) {
-        toastWrongCredentials(
-          "Desculpe, tivemos um problema ao verificar seus dados, tente novamente."
-        );
-        return;
-      }
-      //persistir usuario no store
-      setUsuario(data.usuario);
-      setToken(data.token);
-      toastWellcome();
-      router.push("/");
-
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-      toastWrongCredentials(
-        "Não foi possivel conectar ao servidor, tente novamente mais tarde"
-      );
-    }
+    createUser.mutate(user);
   };
 
   return (
     <div className="flex flex-col items-center h-screen max-h-screen w-screen max-w-screen bg-fk-background/90 text-black font-sans">
+      {createUser.isPending && (
+        <div className="w-full bg-fk-primary/70 text-amber-50">
+          {" "}
+          <p>Criando usuário</p>
+        </div>
+      )}
       <Header showBackButton />
       <StepIndicator step={step} length={3} />
       <h2 className="mt-3 font-semibold text-xl text-center">

@@ -14,7 +14,7 @@ import { Step3 } from "./componenst/form/step3";
 import { Step4 } from "./componenst/form/step4";
 import { Resume } from "./componenst/form/resume";
 import { FC } from "react";
-import { useProductConfig } from "@/app/utils/useProductConfig";
+import { useProductConfig } from "@/hooks/useProductConfig";
 import { uploadImages } from "@/app/utils/imageStorageService";
 import {
   addProductFormData,

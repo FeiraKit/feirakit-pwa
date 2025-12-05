@@ -15,7 +15,7 @@ export function CurrencyInput({
   RHFonChange,
   custonClasses,
 }: CurencyInputProps) {
-  const [value, setValue] = useState<number | undefined>(RHFvalue);
+  const [value, setValue] = useState<number | undefined>(undefined);
   const [displayValue, setDisplayValue] = useState<string>("");
 
   const handleValue = (value: string) => {
@@ -41,6 +41,14 @@ export function CurrencyInput({
     }
     setDisplayValue(value.toFixed(DECIMAL_SIZE).replace(".", ","));
   }, [value]);
+
+  useEffect(() => {
+    if (RHFvalue === undefined || RHFvalue === null) {
+      setValue(undefined);
+    } else {
+      setValue(RHFvalue);
+    }
+  }, [RHFvalue]);
 
   return (
     <div

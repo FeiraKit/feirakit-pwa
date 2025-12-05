@@ -4,7 +4,7 @@ import { FaLock, FaUser } from "react-icons/fa6";
 import Input from "../../Input";
 import { MdEmail } from "react-icons/md";
 import { useFormContext } from "react-hook-form";
-import { RegisterFormData } from "@/app/(public)/register/page";
+import { RegisterFormData } from "@/types/forms/userForm";
 
 export default function Step1({}) {
   const {
