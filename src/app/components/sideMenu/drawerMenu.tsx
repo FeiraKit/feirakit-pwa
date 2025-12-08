@@ -27,12 +27,12 @@ const DrawerLinks = [
     icon: <FaBoxesStacked className="h-6 w-6" />,
     Label: "Meus Produtos",
   },
-  {
-    key: 3,
-    url: "/dashboard",
-    icon: <FaChartLine className="h-6 w-6" />,
-    Label: "Relatórios",
-  },
+  // {
+  //   key: 3,
+  //   url: "/dashboard",
+  //   icon: <FaChartLine className="h-6 w-6" />,
+  //   Label: "Relatórios",
+  // },
   {
     key: 4,
     url: "/myprofile",
@@ -51,7 +51,7 @@ const handleLogout = async () => {
   try {
     await fetch("/api/logout", {
       method: "POST",
-      credentials: "include", // inclui cookies na requisição
+      credentials: "include",
     });
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
@@ -75,6 +75,7 @@ export function DrawerMenu() {
       await handleLogout();
 
       router.refresh();
+      toggleDrawer();
       toastGoodBye();
       logOut();
     }
@@ -84,20 +85,20 @@ export function DrawerMenu() {
     <>
       {/* Overlay (fundo escuro clicável) */}
       <div
-        className="fixed inset-0 bg-black/40"
+        className="fixed inset-0 h-dvh bg-black/40"
         onClick={toggleDrawer}
         aria-hidden="true"
       />
       <div
-        className={`flex flex-col fixed top-0 right-0 h-screen max-h-screen bg-fk-background text-white w-2/3  transition-transform duration-300   ${
+        className={`flex flex-col fixed top-0 right-0 h-dvh max-h-dvh bg-fk-background text-white w-2/3  transition-transform duration-300   ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="pt-12 bg-fk-green/60 px-4 pb-4 flex flex-col  gap-2">
-          <FaUserCircle className="h-16 w-16 text-fk-background" />
+          <FaUserCircle className="h-14 w-14 text-fk-background" />
           <p className="font-bold text-xl">{currentUserName}</p>
         </div>
-        <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+        <nav className="flex-1 overflow-y-auto  flex flex-col gap-3">
           {DrawerLinks.map((item) => (
             <DrawerItem
               key={item.key}
@@ -108,16 +109,16 @@ export function DrawerMenu() {
           ))}
         </nav>
 
-        <div className="border-t-2 border-gray-700 ">
+        <div className="flex flex-col items-start border-t-1 border-gray-700 ">
           <button className="flex justify-center" onClick={handleOnClickLogOut}>
-            <p className="p-4 text-gray-700 active:text-fk-primary/60">
+            <p className="p-2 text-gray-700 active:text-fk-primary/60">
               <FaSignOutAlt className="inline mr-2 h-6 w-6 text-red-900" />
               Sair
             </p>
           </button>
-          <div className="flex flex-col justify-center items-center gap-1 pb-4 ">
-            <p className="text-2xl text-gray-400/50 font-bold">FeiraKIt</p>
-            <p className="text-lg text-gray-400/50 font-bold">1.0.0</p>
+          <div className="flex flex-col justify-center items-center self-center-safe  pb-2">
+            <p className="text-md text-gray-400/50 font-bold">FeiraKIt</p>
+            <p className="text-sm text-gray-400/50 font-bold">1.0.0</p>
           </div>
         </div>
       </div>

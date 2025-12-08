@@ -95,7 +95,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen max-h-screen w-screen max-w-screen bg-fk-background/90 text-black font-sans">
+    <div className="flex flex-col items-center h-dvh max-h-dvh w-screen max-w-screen bg-fk-background/90 text-black font-sans">
       {createUser.isPending && (
         <div className="w-full bg-fk-primary/70 text-amber-50">
           {" "}

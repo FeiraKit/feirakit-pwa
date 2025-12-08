@@ -94,7 +94,7 @@ export default function CreateProduct() {
   }, [methods, user]);
 
   return (
-    <div className="flex flex-col  items-center min-h-screen h-screen max-h-screen w-screen max-w-screen px-6 pt-2 pb-1 bg-fk-background/90">
+    <div className="flex flex-col  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-6 pt-2 pb-1 bg-fk-background/90">
       <Header showBackButton showMenuButton />
       <section className="w-full flex flex-col items-center py-2 h-[85vh] text-black">
         <StepIndicator fillDots step={step} length={steps.length} />

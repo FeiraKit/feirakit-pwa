@@ -139,7 +139,7 @@ export default function EditProductPage() {
     methods.setValue("imagem_url", newImages, { shouldValidate: true });
   };
   return (
-    <div className="flex flex-col  items-center min-h-screen h-screen max-h-screen w-screen max-w-screen px-6  bg-fk-background/90 text-black pb-4 ">
+    <div className="flex flex-col  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-6  bg-fk-background/90 text-black pb-4 ">
       {isSavingProduct && (
         <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
           <p className="text-xl font-semibold">Salvando Produto...</p>

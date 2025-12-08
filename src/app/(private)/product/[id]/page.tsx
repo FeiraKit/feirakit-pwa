@@ -51,7 +51,7 @@ export default function ProductPage() {
   }, [lastScrollY]);
 
   return (
-    <div className="flex flex-col relative items-center min-h-screen  w-full max-w-screen px-6 pt-2 pb-30 bg-fk-background/90 ">
+    <div className="flex flex-col relative items-center min-h-dvh  w-full max-w-screen px-6 pt-2 pb-30 bg-fk-background/90 ">
       <div
         className={`w-full fixed top-0 z-10 transition-all duration-300 px-6 ${
           showHeader ? "translate-y-0 " : "-translate-y-full"
