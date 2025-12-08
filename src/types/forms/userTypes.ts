@@ -30,6 +30,19 @@ export const registerSchema = z
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
+export const changePasswordSchema = z
+  .object({
+    senha_antiga: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+    nova_senha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+    confirmasenha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+  })
+  .refine((data) => data.nova_senha === data.confirmasenha, {
+    message: "As senhas não coincidem",
+    path: ["confirmasenha"],
+  });
+
+export type changePasswordFormData = z.infer<typeof changePasswordSchema>;
+
 export type CreateUserDTO = {
   nome: string;
   email: string;
@@ -40,7 +53,7 @@ export type CreateUserDTO = {
     numero: string;
     bairro: string;
     cep: string;
-    complemento: string;
+    complemento?: string;
     cidade: string;
     estado: string;
   };
@@ -51,7 +64,13 @@ export type LoginDTO = {
   senha: string;
 };
 
-export type updtateUserDTO = CreateUserDTO & {
+export type changePasswordDTO = {
+  email: string;
+  senha: string;
+  nova_senha: string;
+};
+
+export type updtateUserDTO = Omit<CreateUserDTO, "senha"> & {
   id: string;
 };
 
@@ -108,5 +127,10 @@ export type UpdateUserResponse = {
   resultado: boolean;
   usuario: Usuario;
   token: string;
+  mensagem: string;
+};
+
+export type changePasswordResponse = {
+  resultado: true;
   mensagem: string;
 };

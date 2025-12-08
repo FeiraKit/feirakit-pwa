@@ -1,4 +1,6 @@
 import {
+  changePasswordDTO,
+  changePasswordResponse,
   CreateUserDTO,
   CreateUserResponse,
   LoginDTO,
@@ -25,6 +27,13 @@ export function signIn(data: LoginDTO) {
 export function updateUser(data: updtateUserDTO) {
   return api<UpdateUserResponse>("/users", {
     method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+export function changePassword(data: changePasswordDTO) {
+  return api<changePasswordResponse>("/users/change-password", {
+    method: "POST",
     body: JSON.stringify(data),
   });
 }
