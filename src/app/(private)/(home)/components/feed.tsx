@@ -18,6 +18,8 @@ type Filters = {
 };
 
 async function fetcher({ pageParam, searchTerm, selectedCity }: Filters) {
+  {
+  }
   let url = "";
   if (selectedCity) {
     searchTerm = "";

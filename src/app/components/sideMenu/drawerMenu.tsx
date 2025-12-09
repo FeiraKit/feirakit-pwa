@@ -66,8 +66,9 @@ export function DrawerMenu() {
   const logOut = useAuthStore((state) => state.logout);
   if (!open || !user) return null;
 
-  const currentUserName =
-    user.nome.split(" ")[0] + " " + user.nome.split(" ")[1];
+  const firtsName = user.nome.split(" ")[0];
+  const secondName = user.nome.split(" ")[1] || "";
+  const currentUserName = firtsName + " " + secondName;
 
   const handleOnClickLogOut = async () => {
     const confirmLogOut = window.confirm("Tem certeza que deseja sair? ");
@@ -83,7 +84,6 @@ export function DrawerMenu() {
 
   return (
     <>
-      {/* Overlay (fundo escuro clicável) */}
       <div
         className="fixed inset-0 h-dvh bg-black/40"
         onClick={toggleDrawer}

@@ -14,6 +14,8 @@ import Step2 from "@/app/components/form/registerForm/step2";
 import Step3 from "@/app/components/form/registerForm/step3";
 import { RegisterFormData, registerSchema } from "@/types/forms/userTypes";
 import { useCreateUser } from "@/hooks/users/useCreateUser";
+import { toastInfo } from "@/app/utils/toasthelper";
+import { Spin } from "@/app/components/loadings/skeleton";
 
 const stepFields = {
   1: ["nome", "email", "senha", "confirmasenha"],
@@ -90,18 +92,16 @@ export default function Register() {
         estado: data.endereco.estado,
       },
     };
+    if (!navigator.onLine) {
+      toastInfo("verifique sua conexão com a internet e tente novamente");
+      return;
+    }
 
     createUser.mutate(user);
   };
 
   return (
-    <div className="flex flex-col items-center h-dvh max-h-dvh w-screen max-w-screen bg-fk-background/90 text-black font-sans">
-      {createUser.isPending && (
-        <div className="w-full bg-fk-primary/70 text-amber-50">
-          {" "}
-          <p>Criando usuário</p>
-        </div>
-      )}
+    <div className="flex flex-col  items-center h-dvh max-h-dvh w-screen max-w-screen px-6 pt-2 pb-1 bg-fk-background/90 text-black overflow-auto">
       <Header showBackButton />
       <StepIndicator step={step} length={3} />
       <h2 className="mt-3 font-semibold text-xl text-center">
@@ -119,11 +119,11 @@ export default function Register() {
         )}
       </FormProvider>
 
-      <div className="flex gap-2 w-full p-6 justify-center">
+      <div className="flex gap-4 w-full py-6 justify-center">
         {step > 1 && (
           <button
             onClick={() => setStep(step - 1)}
-            className="flex w-4/12 h-10 items-center gap-1 text-fk-primary"
+            className="flex w-4/12 h-10 items-center gap-1 text-fk-primary self-center justify-center"
           >
             <FaArrowLeft /> Voltar
           </button>
@@ -138,16 +138,19 @@ export default function Register() {
         )}
       </div>
       {step == 3 && (
-        <div className="flex gap-2 w-full px-6">
-          <button
-            onClick={methods.handleSubmit(handleCreateUser)}
-            className="w-full h-10 rounded-md bg-fk-primary text-fk-background font-bold disabled:bg-gray-400"
-            disabled={!canSubmit}
-          >
-            Finalizar inscrição
-          </button>
-        </div>
+        <button
+          onClick={methods.handleSubmit(handleCreateUser)}
+          className="w-full flex h-10 rounded-md bg-fk-primary text-fk-background font-bold disabled:bg-gray-400 justify-center items-center"
+          disabled={!canSubmit}
+        >
+          {createUser.isPending ? (
+            <Spin className="h-4 w-4 self-center" />
+          ) : (
+            "Finalizar inscrição"
+          )}
+        </button>
       )}
+
       {openModal && (
         <Modal
           onClose={closeModal}

@@ -5,16 +5,21 @@ import { PatternFormat } from "react-number-format";
 import { BRAZILIAN_STATES } from "@/app/data/states";
 import { useFormContext } from "react-hook-form";
 import { RegisterFormData } from "@/types/forms/userTypes";
+import { toastInfo } from "@/app/utils/toasthelper";
+import { useState } from "react";
+import { SpinProgress } from "../../loadings/skeleton";
 
 export default function Step2({}) {
   const {
     register,
     setValue,
     getValues,
+
     formState: { errors },
   } = useFormContext<RegisterFormData>();
-
+  const [IsLoadingCep, setIsLoadingCep] = useState<boolean>(false);
   const handleCepBlur = async (cep: string) => {
+    setIsLoadingCep(true);
     const cleanCep = cep.replace(/\D/g, "");
     if (cleanCep.length !== 8) return;
 
@@ -22,9 +27,12 @@ export default function Step2({}) {
       const res = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
       const data = await res.json();
 
-      if (data.erro) return; // CEP inválido
+      if (data.erro) {
+        toastInfo("Confira o CEP Informado");
+        setIsLoadingCep(false);
 
-      // Preencher os campos automaticamente
+        return;
+      }
 
       setValue("endereco.rua", data.logradouro || "", {
         shouldValidate: true,
@@ -46,13 +54,15 @@ export default function Step2({}) {
         shouldDirty: true,
         shouldTouch: true,
       });
+      setIsLoadingCep(false);
     } catch (error) {
+      setIsLoadingCep(false);
       console.error("Erro ao buscar CEP:", error);
     }
   };
 
   return (
-    <div className="flex flex-col  w-full px-6">
+    <div className="flex flex-col  w-full ">
       <label className="mt-8" htmlFor="zipcode">
         CEP:
       </label>
@@ -64,12 +74,14 @@ export default function Step2({}) {
         format="#####-###"
         placeholder="digite seu cep"
         customInput={Input}
+        rigthIcon={IsLoadingCep ? <SpinProgress className="w-6 h-6" /> : <></>}
         value={getValues("endereco.cep")}
         onValueChange={(values) => {
           // atualiza o RHF
           setValue("endereco.cep", values.value, { shouldValidate: true });
         }}
       />
+
       {errors.endereco?.cep && (
         <span className="text-xs text-fk-error-text">
           {errors.endereco.cep.message as string}
@@ -99,11 +111,8 @@ export default function Step2({}) {
             placeholder="numero"
             {...register("endereco.numero")}
           />
-
           {errors.endereco?.numero && (
-            <span className="text-xs text-fk-error-text">
-              {errors.endereco.numero.message as string}
-            </span>
+            <span className="text-xs text-fk-error-text ">Número</span>
           )}
         </div>
       </div>
@@ -139,7 +148,12 @@ export default function Step2({}) {
       <label className="mt-2" htmlFor="city">
         Cidade
       </label>
-      <Input id="city" placeholder="Cidade" {...register("endereco.cidade")} />
+      <Input
+        id="city"
+        placeholder="Cidade"
+        {...register("endereco.cidade")}
+        disabled={true}
+      />
       {errors.endereco?.cidade && (
         <span className="text-xs text-fk-error-text">
           {errors.endereco.cidade.message as string}
@@ -152,6 +166,7 @@ export default function Step2({}) {
       <select
         id="state"
         {...register("endereco.estado")}
+        disabled={true}
         className="border-2 border-fk-primary/30   text-fk-primary  h-10 rounded-md w-full  outline-fk-primary placeholder:text-fk-primary/80 px-2"
       >
         <option value="">Selecione um Estado</option>

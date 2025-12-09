@@ -21,6 +21,7 @@ export default function SignIn() {
   const setToken = useAuthStore((state) => state.setToken);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -28,14 +29,17 @@ export default function SignIn() {
   const signIn = useSignIn();
 
   const HandleSignIn = async () => {
+    setIsLoading(true);
     if (!email) {
       emailRef.current?.focus();
       toastEmptyField("por favor, informe um email");
+      setIsLoading(false);
       return;
     }
     if (!password) {
       passwordRef.current?.focus();
       toastEmptyField("por favor, informe uma senha");
+      setIsLoading(false);
       return;
     }
 
@@ -59,12 +63,13 @@ export default function SignIn() {
         //persistir usuario no store
         setUsuario(data.usuario);
         setToken(data.token);
+        setIsLoading(false);
         toastWellcome();
         router.push("/");
       },
       onError: (e) => {
         console.log(e);
-
+        setIsLoading(false);
         if (e.message === "Email não cadastrado") {
           emailRef.current?.focus();
           toastEmptyField("Não encontramos uma conta com esse e-mail.");
@@ -105,6 +110,11 @@ export default function SignIn() {
           divClass="mt-2 mb-4"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              passwordRef.current?.focus();
+            }
+          }}
         />
         <Input
           LeftIcon={<FaLock />}
@@ -114,14 +124,22 @@ export default function SignIn() {
           divClass="mb-1"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              HandleSignIn();
+            }
+          }}
         />
         {/* <span className="text-xs text-black">Esqueci minha senha</span> */}
 
         <BaseButton
           text="Entrar"
+          isLoading={isLoading}
           className="mt-4"
           onClick={() => HandleSignIn()}
+          disabled={isLoading}
         />
+
         <Link
           href="/register"
           className="flex justify-center mt-2 text-fk-primary"

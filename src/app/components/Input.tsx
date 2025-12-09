@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   LeftIcon?: ReactNode;
+  rigthIcon?: ReactNode;
   divClass?: string;
   imputClass?: string;
 };
@@ -17,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       type,
       value,
       imputClass,
-
+      rigthIcon,
       ...props
     }: InputProps,
     ref
@@ -54,6 +55,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           >
             {visible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
           </button>
+        )}
+        {rigthIcon && (
+          <span className="absolute  text-fk-primary right-2">{rigthIcon}</span>
         )}
       </div>
     );

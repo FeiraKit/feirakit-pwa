@@ -20,7 +20,7 @@ export default function Step3({ openTermsModal, openPolicyModal }: Step3Props) {
     formState: { errors },
   } = useFormContext<RegisterFormData>();
   return (
-    <div className="flex flex-col  w-full px-6">
+    <div className="flex flex-col  w-full ">
       <label className="mt-8" htmlFor="nome">
         Whatsapp:
       </label>

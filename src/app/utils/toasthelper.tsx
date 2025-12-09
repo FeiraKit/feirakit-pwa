@@ -89,6 +89,17 @@ export function toastMissing(message: string) {
   });
 }
 
+export function toastInfo(message: string) {
+  toast.warn(`${message}`, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: "colored",
+  });
+}
+
 export function toastEmptyField(message: string) {
   toast.error(`${message}`, {
     position: "top-right",
