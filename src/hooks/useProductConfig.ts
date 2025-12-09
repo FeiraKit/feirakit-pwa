@@ -30,13 +30,19 @@ export function useProductConfig() {
     }
 
     const fetchConfigs = async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort("timeout"), 30000);
       try {
         setLoading(true);
         setError(null);
 
         const [unitsRes, citiesRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/units`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/units`, {
+            signal: controller.signal,
+          }),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/get_cities`, {
+            signal: controller.signal,
+          }),
         ]);
 
         if (!unitsRes.ok || !citiesRes.ok) {
@@ -59,9 +65,9 @@ export function useProductConfig() {
         setZustandConfigs(configObject);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        console.error(err);
-        setError("Erro ao carregar produto");
+        setError("Erro ao carregar configurações");
       } finally {
+        clearTimeout(timeout);
         setLoading(false);
       }
     };

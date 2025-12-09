@@ -10,44 +10,16 @@ import { SelectCity } from "../../../components/selectCity";
 import { FlatList } from "./flatlist";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchProductInput } from "./searchProductInput";
-
-type Filters = {
-  pageParam?: number;
-  searchTerm?: string;
-  selectedCity?: string;
-};
-
-async function fetcher({ pageParam, searchTerm, selectedCity }: Filters) {
-  {
-  }
-  let url = "";
-  if (selectedCity) {
-    searchTerm = "";
-    url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?cidade=${selectedCity}`;
-  }
-
-  if (searchTerm && searchTerm?.length > 0) {
-    url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?nome=${searchTerm}`;
-  }
-
-  if (!searchTerm && !selectedCity) {
-    url = `${process.env.NEXT_PUBLIC_API_URL}/products?page=${pageParam}&limit=10`;
-  }
-
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    throw new Error(`Erro ${res.status}: ${res.statusText}`);
-  }
-
-  return res.json();
-}
+import { ErrorMessage } from "@/app/components/errorMessage";
+import { fetcher } from "@/sevices/utils/feedFetcher";
+import { FeedSkeleton } from "@/app/components/loadings/skeleton";
 
 export function Feed() {
   const { ref, inView } = useInView();
   const [products, setProducts] = useState<ProductType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const [isOnline, setIsOnline] = useState<boolean>(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -58,16 +30,34 @@ export function Feed() {
       queryFn: ({ pageParam }) =>
         fetcher({ pageParam, searchTerm, selectedCity }),
       initialPageParam: 1,
+      retry: 1,
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.length > 0 ? allPages.length + 1 : undefined;
       },
+      enabled: isOnline,
     });
 
   useEffect(() => {
-    if (inView) {
+    setIsOnline(navigator.onLine);
+
+    const goOnline = () => setIsOnline(true);
+    const goOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOnline) return;
+    if (inView && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [inView, fetchNextPage, isFetchingNextPage, isOnline]);
 
   const handleSearchTerm = (term: string) => {
     const cleanTerm = term.replace(/[{}[\]*()&#@%<>\\/|"'$^]/g, "");
@@ -131,11 +121,10 @@ export function Feed() {
         currentCity={selectedCity}
         setCurrentCity={getUrlSearchCity}
       />
-      {error && (
-        <div className="text-red-500">Ocorreu um erro: {error.message}</div>
-      )}
+      {!isOnline && <ErrorMessage message={"sem conexão com a internet"} />}
+      {error && isOnline && <ErrorMessage message={error.message} />}
 
-      {isPending && <div className="text-black">Carregando...</div>}
+      {isPending && isOnline && <FeedSkeleton />}
 
       {data?.pages[0].length === 0 && !isPending && (
         <div className="mb-4 text-gray-700">

@@ -30,8 +30,35 @@
   }
 }
 
+.Toastify__toast--warning {
+  color: #000 !important; /* texto preto */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Shimmer azul diagonal */
+@keyframes shimmerBlue {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-blue {
+  --duration: 3.2s;
+  background: linear-gradient(
+    75deg,
+    rgba(130, 170, 255, 0.15) 0%,
+    rgba(0, 180, 255, 0.18) 20%,
+    rgba(130, 170, 255, 0.15) 30%
+  );
+
+  background-size: 200% 100%;
+  animation: shimmerBlue var(--duration) ease-in-out infinite;
 }

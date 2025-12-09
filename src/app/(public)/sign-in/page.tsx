@@ -4,6 +4,7 @@ import BaseButton from "@/app/components/baseButton";
 import Input from "@/app/components/Input";
 import {
   toastEmptyField,
+  toastInfo,
   toastWellcome,
   toastWrongCredentials,
 } from "@/app/utils/toasthelper";
@@ -44,6 +45,11 @@ export default function SignIn() {
     }
 
     const credentials = { email, senha: password };
+    if (!navigator.onLine) {
+      toastInfo("verifique sua conexão com a internet e tente novamente");
+      setIsLoading(false);
+      return;
+    }
 
     signIn.mutate(credentials, {
       onSuccess: async (data) => {

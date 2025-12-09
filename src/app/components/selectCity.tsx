@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaLocationDot, FaX } from "react-icons/fa6";
+import { TbFaceIdError } from "react-icons/tb";
 
 import { useProductConfig } from "../../hooks/useProductConfig";
+import { Spin } from "./loadings/skeleton";
 
 type SelectCityProps = {
   currentCity: string;
@@ -11,7 +13,7 @@ type SelectCityProps = {
 };
 
 export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
-  const { configs, loading } = useProductConfig();
+  const { configs, loading, error } = useProductConfig();
   const [availableCities, setAvailableCities] = useState<string[]>([]);
   const [showList, setShowList] = useState<boolean>(false);
   const WrapperCityDiv = useRef<HTMLDivElement>(null);
@@ -90,8 +92,11 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
             <FaX className="h-6 w-6 text-fk-primary/80 active:text-fk-primary/60" />
           </div>
           {loading && (
-            <div className="w-full text-center text-gray-400 py-4">
-              Carregando...
+            <div className="w-full flex flex-col text-center text-gray-400 py-4">
+              <Spin
+                className="w-8 h-8 self-center"
+                custonBorder="order-fk-primary dark:border-fk-primary"
+              />
             </div>
           )}
 
@@ -114,7 +119,14 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
             </div>
           ))}
 
-          {!loading && availableCities.length === 0 && (
+          {!loading && error && (
+            <div className="flex justify-center items-center gap-2 w-full text-center text-gray-400 py-4">
+              <TbFaceIdError className="text-red-300" size={32} /> erro ao
+              carregar configurações
+            </div>
+          )}
+
+          {!loading && !error && availableCities.length === 0 && (
             <div className="w-full text-center text-gray-400 py-4">
               Nenhum produto nesta cidade
             </div>
