@@ -83,22 +83,23 @@ export function DrawerMenu() {
   };
 
   return (
-    <>
+    <div>
       <div
-        className="fixed inset-0 h-dvh bg-black/40"
+        className="fixed inset-0 h-dvh max-h-dvh bg-black/40"
         onClick={toggleDrawer}
         aria-hidden="true"
       />
       <div
-        className={`flex flex-col fixed top-0 right-0 h-dvh max-h-dvh bg-fk-background text-white w-2/3  transition-transform duration-300   ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`flex flex-col fixed top-0 right-0 h-dvh min-h-0 bg-fk-background text-white 
+    w-2/3  transition-transform duration-300 
+    ${open ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="pt-12 bg-fk-green/60 px-4 pb-4 flex flex-col  gap-2">
+        <div className="bg-fk-green/60 p-4 pt-6 flex flex-col gap-2">
           <FaUserCircle className="h-14 w-14 text-fk-background" />
           <p className="font-bold text-xl">{currentUserName}</p>
         </div>
-        <nav className="flex-1 overflow-y-auto  flex flex-col gap-3">
+
+        <nav className="flex-1 overflow-y-auto  flex flex-col gap-3 py-1">
           {DrawerLinks.map((item) => (
             <DrawerItem
               key={item.key}
@@ -109,19 +110,20 @@ export function DrawerMenu() {
           ))}
         </nav>
 
-        <div className="flex flex-col items-start border-t-1 border-gray-700 ">
+        <div className="flex flex-col items-start border-t border-gray-700 p-2">
           <button className="flex justify-center" onClick={handleOnClickLogOut}>
             <p className="p-2 text-gray-700 active:text-fk-primary/60">
               <FaSignOutAlt className="inline mr-2 h-6 w-6 text-red-900" />
               Sair
             </p>
           </button>
-          <div className="flex flex-col justify-center items-center self-center-safe  pb-2">
-            <p className="text-md text-gray-400/50 font-bold">FeiraKIt</p>
+
+          <div className="flex flex-col items-center self-center pb-2">
+            <p className="text-md text-gray-400/50 font-bold">FeiraKit</p>
             <p className="text-sm text-gray-400/50 font-bold">1.0.0</p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
