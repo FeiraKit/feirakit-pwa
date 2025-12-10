@@ -13,6 +13,7 @@ import { SearchProductInput } from "./searchProductInput";
 import { ErrorMessage } from "@/app/components/errorMessage";
 import { fetcher } from "@/sevices/utils/feedFetcher";
 import { FeedSkeleton } from "@/app/components/loadings/skeleton";
+import { NoResults } from "@/app/components/noResults";
 
 export function Feed() {
   const { ref, inView } = useInView();
@@ -126,11 +127,7 @@ export function Feed() {
 
       {isPending && isOnline && <FeedSkeleton />}
 
-      {data?.pages[0].length === 0 && !isPending && (
-        <div className="mb-4 text-gray-700">
-          {products.length} produto encontrado
-        </div>
-      )}
+      {data?.pages[0].length === 0 && !isPending && <NoResults />}
 
       {!isPending && !error && data?.pages[0].length !== 0 && (
         <FlatList
