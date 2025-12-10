@@ -105,9 +105,10 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex flex-col justify-between  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-8 pt-2 pb-30 bg-fk-background/90">
-      <Header showBackButton={false} />
-      <section className="flex flex-col w-full">
+    <div className="flex flex-col min-h-dvh h-dvh bg-fk-background/90 w-screen px-6">
+      <section className="flex flex-col flex-1 items-center justify-center w-full ">
+        <Header showBackButton={false} />
+
         <h2 className="text-fk-primary font-extrabold text-xl ">Bem Vindo</h2>
         <Input
           LeftIcon={<FaUser />}
@@ -154,7 +155,7 @@ export default function SignIn() {
         </Link>
       </section>
 
-      <section className="w-full justify-center ">
+      <footer className="w-full justify-center self-end-safe px-6 pb-4">
         <Link
           href="/policy"
           className="flex justify-center mt-2 text-fk-primary"
@@ -162,7 +163,7 @@ export default function SignIn() {
           Política de Privacidade
         </Link>
         <p className="text-center text-gray-400">Feira-Kit &copy; 2025</p>
-      </section>
+      </footer>
     </div>
   );
 }
