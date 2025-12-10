@@ -2,6 +2,7 @@
 
 import { Ref } from "react";
 import { ProductItem, ProductType } from "./productItem";
+import { Spin } from "@/app/components/loadings/skeleton";
 
 type FlatListProps = {
   products: ProductType[];
@@ -22,8 +23,13 @@ export function FlatList({
       ))}
 
       {isInfiniteScroll && (
-        <div ref={sentinelRef} className="w-full h-10">
-          {isFetchingNextPage && <p>carregando mais</p>}
+        <div
+          ref={sentinelRef}
+          className="w-full flex items-center justify-center h-10 -mt-2 col-span-2"
+        >
+          {isFetchingNextPage && (
+            <Spin className="w-6 h-6 " custonBorder="border-fk-primary" />
+          )}
         </div>
       )}
     </div>
