@@ -14,7 +14,7 @@ export function useProductConfig() {
   const isConfigsLoaded = useProductConfigStore((state) => state.loaded);
 
   const [configs, setConfigs] = useState<ProductUnites | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function useProductConfig() {
         categorias: zustandCategories,
         cidades: zustandCities,
       };
-
+      setLoading(false);
       setConfigs(zustandConfigs);
       return;
     }

@@ -1,15 +1,12 @@
 "use client";
 
 import { Header } from "@/app/components/header";
+import { MyProfileSkeleton, Spin } from "@/app/components/loadings/skeleton";
 import { BRAZILIAN_STATES } from "@/app/data/states";
 import { useUpdateUser } from "@/hooks/users/useUpdateUser";
 
 import { useAuthStore } from "@/stores/useAuthStore";
-import {
-  updateUserFormData,
-  updateUserSchema,
-  updtateUserDTO,
-} from "@/types/forms/userTypes";
+import { updateUserFormData, updateUserSchema } from "@/types/forms/userTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -73,6 +70,9 @@ export default function MyProducts() {
 
   const handleUpdateUser = (data: updateUserFormData) => {
     if (!user?.id) return;
+    const confirmed = window.confirm("Deseja realmente alterar estes dados?");
+
+    if (!confirmed) return;
     const dataWithId = {
       ...data,
       id: user.id,
@@ -88,11 +88,11 @@ export default function MyProducts() {
 
   return (
     <div className="flex flex-col  items-center min-h-dvh max-h-dvh  w-screen max-w-screen px-6 pt-2  bg-fk-background/90 text-black  border-2 ">
+      <Header showBackButton showMenuButton />
       {!user ? (
-        <p>carregando</p>
+        <MyProfileSkeleton />
       ) : (
         <>
-          <Header showBackButton showMenuButton />
           <div className="flex justify-between w-full border-b border-gray-400 py-2 items-end ">
             <div>
               <h2 className="text-2xl text-gray-700 font-bold">Minha conta</h2>
@@ -297,10 +297,15 @@ export default function MyProducts() {
             className={`mb-4 flex w-full h-12  items-center justify-center rounded-md bg-fk-primary my-4 transition-all duration-150 ${
               !isUpdateMode && "invisible"
             }`}
+            disabled={updateUser.isPending}
             onClick={methods.handleSubmit(handleUpdateUser)}
           >
             <p className="text-lg font-bold text-amber-50">
-              Confirmar alterações
+              {updateUser.isPending ? (
+                <Spin className="w-6 h-6" />
+              ) : (
+                "Confirmar alterações"
+              )}
             </p>
           </button>
         </>

@@ -17,6 +17,7 @@ type myProductProps = {
   price: number;
   quantity: number;
   productId: string;
+  userId: string;
 };
 export function MyProductItem({
   imageUrl,
@@ -24,6 +25,7 @@ export function MyProductItem({
   name,
   quantity,
   productId,
+  userId,
 }: myProductProps) {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement | null>(null);
@@ -31,9 +33,8 @@ export function MyProductItem({
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: (id: string) => removeProduct(id),
-
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+      queryClient.invalidateQueries({ queryKey: ["myProducts", userId] });
     },
   });
 
@@ -69,7 +70,11 @@ export function MyProductItem({
     };
   }, [showOptions]);
   return (
-    <div className="text-gray-500 flex w-full justify-between items-center p-2 border rounded-lg bg-gray-300 border-fk-primary relative overflow-hidden">
+    <div
+      className={`text-gray-500 flex w-full justify-between items-center p-2 border rounded-lg bg-gray-300 border-fk-primary relative overflow-hidden ${
+        mutation.isPending ? "filter grayscale" : ""
+      }`}
+    >
       <div className="flex w-5/6">
         <div className="w-[52px] h-[52px] relative mr-2 rounded-md">
           <Image

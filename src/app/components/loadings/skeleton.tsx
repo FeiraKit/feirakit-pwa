@@ -52,6 +52,36 @@ export function FeedSkeleton() {
   );
 }
 
+export function CreateProductSkeleton() {
+  return (
+    <div className="w-full max-w-lg flex flex-col mt-4 mb-2  gap-3  flex-wrap overflow-y-hidem h-dvh">
+      <Skeleton className="w-2/3 h-8 self-center" />
+      <Skeleton className="w-full h-12 self-center" duration="3.2s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.1s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.0s" />
+      <Skeleton className="w-full h-12 self-center" duration="2.8s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.0s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.2s" />
+    </div>
+  );
+}
+
+export function MyProfileSkeleton() {
+  return (
+    <div className="w-full max-w-lg flex flex-col mt-4 mb-2  gap-3  flex-wrap overflow-y-hidem h-dvh">
+      <div className="flex justify-between w-full">
+        <Skeleton className="w-2/4 h-8" /> <Skeleton className="w-1/4 h-8" />
+      </div>
+      <Skeleton className="w-full h-12 self-center" duration="3.2s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.1s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.0s" />
+      <Skeleton className="w-full h-12 self-center" duration="2.8s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.0s" />
+      <Skeleton className="w-full h-12 self-center" duration="3.2s" />
+    </div>
+  );
+}
+
 export function Spin({
   className = "",
   custonBorder,

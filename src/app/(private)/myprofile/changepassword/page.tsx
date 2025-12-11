@@ -2,6 +2,7 @@
 
 import { Header } from "@/app/components/header";
 import Input from "@/app/components/Input";
+import { Spin } from "@/app/components/loadings/skeleton";
 import { useChangePassword } from "@/hooks/users/useChangePassword";
 import { useSignIn } from "@/hooks/users/useSignIn";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -51,6 +52,8 @@ export default function MyProducts() {
 
   const HandleChangePassword = (data: changePasswordFormData) => {
     if (!user) return;
+    const confirmed = window.confirm("Deseja realmente alterar estes dados?");
+    if (!confirmed) return;
     const changePasswordData = {
       email: user.email,
       senha: data.senha_antiga,
@@ -86,11 +89,15 @@ export default function MyProducts() {
                 )}
 
                 <button
-                  className="w-full h-12 rounded-md bg-fk-primary text-white font-semibold mt-6 active:bg-fk-primary/80"
+                  className="w-full h-12 rounded-md bg-fk-primary text-white font-semibold mt-6 active:bg-fk-primary/80 flex justify-center items-center"
                   onClick={() => HandleVerifyPasswoard(currentPassword)}
                   disabled={checkPassword.isPending}
                 >
-                  {!checkPassword.isPending ? "Continuar" : "loading..."}
+                  {!checkPassword.isPending ? (
+                    "Continuar"
+                  ) : (
+                    <Spin className="w-6 h-6" />
+                  )}
                 </button>
               </>
             )}
@@ -138,10 +145,14 @@ export default function MyProducts() {
                 </div>
 
                 <button
-                  className="w-full h-12 rounded-md bg-fk-primary text-white font-semibold mt-6 active:bg-fk-primary/80"
+                  className="w-full h-12 rounded-md bg-fk-primary text-white font-semibold mt-6 active:bg-fk-primary/80 flex justify-center items-center"
                   onClick={handleSubmit(HandleChangePassword)}
                 >
-                  Salvar nova senha
+                  {changePassword.isPending ? (
+                    <Spin className="w-4 h-4" />
+                  ) : (
+                    "Salvar nova senha"
+                  )}
                 </button>
               </>
             )}

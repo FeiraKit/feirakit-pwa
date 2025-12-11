@@ -2,7 +2,10 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { updateUser } from "@/sevices/userService";
-import { toastWellcome, toastWrongCredentials } from "@/app/utils/toasthelper";
+import {
+  toastGenericSucces,
+  toastWrongCredentials,
+} from "@/app/utils/toasthelper";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
 
@@ -29,11 +32,11 @@ export function useUpdateUser() {
 
       setUsuario(data.usuario);
       setToken(data.token);
-      toastWellcome();
+      toastGenericSucces("Seus dados foram alterados");
       router.push("/");
     },
     onError: () => {
-      toastWrongCredentials("tivemos um problema ao criar o usuário");
+      toastWrongCredentials("tivemos um problema ao editar o usuário");
     },
   });
 }
