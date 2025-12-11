@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Spin } from "./skeleton";
 
-export function SavingProduct() {
+export function UpdatingProduct() {
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function SavingProduct() {
         <div className="relative w-full h-72 opacity-90 hover:opacity-100 transition-opacity">
           {isOnline ? (
             <Image
-              src="/saving.webp"
+              src="/updatingProduct.webp"
               alt="Erro"
               fill
               unoptimized
@@ -37,7 +37,7 @@ export function SavingProduct() {
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src="/saving.webp"
+              src="/updatingProduct.webp"
               alt="Erro offline"
               className="w-full h-full object-contain cursor-pointer"
             />
@@ -45,7 +45,9 @@ export function SavingProduct() {
         </div>
       </button>
 
-      <p className="mt-4 text-lg font-medium text-gray-700">Salvando Produto</p>
+      <p className="mt-4 text-lg font-medium text-gray-700">
+        Atualizando o produto
+      </p>
 
       <div className="w-full flex items-center-safe justify-center">
         <Spin className="w-6 h-6" custonBorder="border-fk-primary" />
