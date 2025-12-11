@@ -9,7 +9,7 @@ import { CurrencyInput } from "../../createproduct/componenst/CurrencyInput";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FaPencil, FaX } from "react-icons/fa6";
-import { toastAddToCart, toastImagesLimit } from "@/app/utils/toasthelper";
+import { toastGenericSucces, toastImagesLimit } from "@/app/utils/toasthelper";
 import { Controller, useForm } from "react-hook-form";
 import {
   addProductFormData,
@@ -21,6 +21,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { deleteImage, uploadImages } from "@/app/utils/imageStorageService";
 import { updateProduct } from "@/sevices/ProductServices";
 import { useRouter } from "next/navigation";
+import { CreateProductSkeleton } from "@/app/components/loadings/skeleton";
+import { useQueryClient } from "@tanstack/react-query";
+import { useProductStore } from "@/stores/useProductStore";
+import { UpdatingProduct } from "@/app/components/loadings/updatingProduct";
 
 export default function EditProductPage() {
   const methods = useForm<addProductFormData>({
@@ -41,35 +45,14 @@ export default function EditProductPage() {
   const [isSavingProduct, setIsSavingProduct] = useState(false);
   const categories = configs?.categorias;
   const measures = configs?.medidas;
+  const updateProductZustand = useProductStore((state) => state.updateProduct);
   const citiesOptions = configs?.cidades || [];
-
+  const queryClient = useQueryClient();
   function handleRemoveImage(imgUrl: string) {
     const newImages = currentImages.filter((url) => url !== imgUrl);
     setImagesToRemove((prev) => [...prev, imgUrl]);
     setCurrentImages(newImages);
     methods.setValue("imagem_url", newImages, { shouldValidate: true });
-  }
-
-  async function onSubmit(data: addProductFormData) {
-    setIsSavingProduct(true);
-    const slug = data.nome
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-    const uploadedImages: string[] = await uploadImages({
-      blobsUrls: data.imagem_url,
-      slugProduct: slug,
-    });
-    data.imagem_url = uploadedImages;
-    methods.setValue("imagem_url", uploadedImages);
-
-    await deleteImage(imagesToRemove);
-
-    await updateProduct(data, id);
-    setIsSavingProduct(false);
-    toastAddToCart("Produto editado com sucesso!");
-    router.push("/myproducts");
   }
 
   useEffect(() => {
@@ -138,22 +121,44 @@ export default function EditProductPage() {
 
     methods.setValue("imagem_url", newImages, { shouldValidate: true });
   };
+
+  async function onSubmit(data: addProductFormData) {
+    setIsSavingProduct(true);
+    const slug = data.nome
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    const uploadedImages: string[] = await uploadImages({
+      blobsUrls: data.imagem_url,
+      slugProduct: slug,
+    });
+    data.imagem_url = uploadedImages;
+    methods.setValue("imagem_url", uploadedImages);
+
+    await deleteImage(imagesToRemove);
+
+    await updateProduct(data, id);
+    updateProductZustand(id, data);
+    setIsSavingProduct(false);
+    toastGenericSucces("Produto editado com sucesso!");
+    queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+    router.push("/myproducts");
+  }
   return (
     <div className="flex flex-col  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-6  bg-fk-background/90 text-black pb-4 ">
       {isSavingProduct && (
-        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
-          <p className="text-xl font-semibold">Salvando Produto...</p>
+        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10 ">
+          <UpdatingProduct />
         </div>
       )}
-
+      <Header showBackButton showMenuButton />
       {loading || configLoading ? (
-        <p>carregando</p>
+        <CreateProductSkeleton />
       ) : (
         <>
-          <Header showBackButton showMenuButton />
           <section className="w-full flex  flex-col flex-1 overflow-y-auto  pt-2  text-black ">
             <p className="self-center text-2xl">{`Atualizar “${product?.nome}”:`}</p>
-
             <input
               type="text"
               {...methods.register("nome")}
