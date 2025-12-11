@@ -11,6 +11,7 @@ import {
 import { FaBoxesStacked, FaChartLine } from "react-icons/fa6";
 import { DrawerItem } from "./drawerItem";
 import { toastGoodBye } from "@/app/utils/toasthelper";
+import { usePathname } from "next/navigation";
 
 import { useRouter } from "next/navigation";
 
@@ -61,6 +62,7 @@ const handleLogout = async () => {
 
 export function DrawerMenu() {
   const { open, toggleDrawer } = useDrawer();
+  const pathname = usePathname();
   const user = useAuthStore((state) => state.usuario);
   const router = useRouter();
   const logOut = useAuthStore((state) => state.logout);
@@ -106,6 +108,11 @@ export function DrawerMenu() {
               Icon={item.icon}
               label={item.Label}
               url={item.url}
+              active={
+                item.url === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.url)
+              }
             />
           ))}
         </nav>

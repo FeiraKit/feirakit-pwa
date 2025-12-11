@@ -300,13 +300,13 @@ export default function MyProducts() {
             disabled={updateUser.isPending}
             onClick={methods.handleSubmit(handleUpdateUser)}
           >
-            <p className="text-lg font-bold text-amber-50">
-              {updateUser.isPending ? (
-                <Spin className="w-6 h-6" />
-              ) : (
-                "Confirmar alterações"
-              )}
-            </p>
+            {updateUser.isPending ? (
+              <Spin className="w-6 h-6" />
+            ) : (
+              <p className="text-lg font-bold text-amber-50">
+                Confirmar alterações
+              </p>
+            )}
           </button>
         </>
       )}
