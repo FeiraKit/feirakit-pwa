@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Productdetails, useProductStore } from "@/stores/useProductStore";
 
 export function useProductById(id: string) {
-  const addProduct = useProductStore((state) => state.setProducts);
+  const addProduct = useProductStore((state) => state.addProduct);
 
   const zustandProducts = useProductStore((state) => state.products);
 
@@ -18,6 +18,7 @@ export function useProductById(id: string) {
     const fetchProduct = async () => {
       if (existingProduct) {
         setProduct(existingProduct);
+        setLoading(false);
         return;
       }
       try {
@@ -32,7 +33,7 @@ export function useProductById(id: string) {
 
         const data: Productdetails = await res.json();
         setProduct(data);
-        addProduct([...zustandProducts, data]);
+        addProduct(data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         console.error(err);
