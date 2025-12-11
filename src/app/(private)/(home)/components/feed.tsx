@@ -63,21 +63,17 @@ export function Feed() {
   const handleSearchTerm = (term: string) => {
     const cleanTerm = term.replace(/[{}[\]*()&#@%<>\\/|"'$^]/g, "");
     setSearchTerm(decodeURI(cleanTerm));
-    params.delete("cidade");
-    setSelectedCity("");
     if (term === "" || cleanTerm === "") {
       params.delete("nome");
       router.push(`?${params.toString()}`);
       return;
     }
     params.set("nome", encodeURIComponent(cleanTerm));
-
     router.push(`?${params.toString()}`);
   };
 
   const getUrlSearchCity = (city: string) => {
     setSelectedCity(city);
-    params.delete("nome");
     if (city === "") {
       params.delete("cidade");
       router.push(`?${params.toString()}`);
@@ -99,12 +95,10 @@ export function Feed() {
 
     if (city) {
       setSelectedCity(decodeURI(city));
-      setSearchTerm("");
     }
 
     if (searchTerm) {
       setSearchTerm(decodeURI(searchTerm));
-      setSelectedCity("");
     }
   }, [searchParams]);
 

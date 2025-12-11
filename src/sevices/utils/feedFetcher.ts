@@ -13,18 +13,13 @@ export async function fetcher({
   const timeout = setTimeout(() => controller.abort("timeout"), 30000);
 
   let url = "";
-  if (selectedCity) {
-    searchTerm = "";
-    url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?cidade=${selectedCity}`;
-  }
 
-  if (searchTerm && searchTerm?.length > 0) {
-    url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?nome=${searchTerm}`;
-  }
-
-  if (!searchTerm && !selectedCity) {
+  if (searchTerm || selectedCity) {
+    url = `${process.env.NEXT_PUBLIC_API_URL}/products/filters?cidade=${selectedCity}&nome=${searchTerm}`;
+  } else {
     url = `${process.env.NEXT_PUBLIC_API_URL}/products?page=${pageParam}&limit=10`;
   }
+
   try {
     const res = await fetch(url, { signal: controller.signal });
 
