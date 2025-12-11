@@ -10,6 +10,8 @@ import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
 import { toastMissing } from "@/app/utils/toasthelper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useProductStore } from "@/stores/useProductStore";
 
 type myProductProps = {
   name: string;
@@ -29,6 +31,7 @@ export function MyProductItem({
 }: myProductProps) {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef<HTMLDivElement | null>(null);
+  const deleteProductZustand = useProductStore((state) => state.removeProduct);
   const queryClient = useQueryClient();
   const router = useRouter();
   const mutation = useMutation({
@@ -44,6 +47,7 @@ export function MyProductItem({
     if (!confirmed) return;
     deleteImage(imageUrl);
     mutation.mutate(id);
+    deleteProductZustand(id);
     toastMissing("Produto excluído com sucesso!");
   }
 
@@ -75,7 +79,7 @@ export function MyProductItem({
         mutation.isPending ? "filter grayscale" : ""
       }`}
     >
-      <div className="flex w-5/6">
+      <Link href={`/product/${productId}`} className="flex w-5/6">
         <div className="w-[52px] h-[52px] relative mr-2 rounded-md">
           <Image
             alt="uma foto do produto"
@@ -93,7 +97,7 @@ export function MyProductItem({
             <span className="text-sm">{`estoque: ${quantity} `} </span>
           </p>
         </div>
-      </div>
+      </Link>
 
       <div
         ref={optionsRef}
