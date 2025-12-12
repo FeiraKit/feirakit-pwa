@@ -345,7 +345,7 @@ export default function EditProductPage() {
             )}
           </section>
           <button
-            className="flex w-full h-8  items-center justify-center  rounded-md bg-fk-primary my-4"
+            className="flex w-full h-12  items-center justify-center  rounded-md bg-fk-primary my-4"
             onClick={methods.handleSubmit(onSubmit)}
           >
             <p className="text-lg font-bold text-amber-50 ">Pronto</p>

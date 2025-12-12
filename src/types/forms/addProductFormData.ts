@@ -17,8 +17,11 @@ export const addProductSchema = z.object({
   produtor_id: z.string(),
   validade: z.string(),
   imagem_url: z
-    .array(z.string())
-    .min(1, { error: "Adicione fotos do produto" }),
+    .any()
+    .refine((v) => Array.isArray(v) && v.length >= 1, {
+      message: "Adicione pelo menos uma foto do produto",
+    })
+    .transform((v) => v as string[]),
 });
 
 export type addProductFormData = z.infer<typeof addProductSchema>;

@@ -3,7 +3,7 @@ import { Header } from "@/app/components/header";
 export default function About() {
   return (
     <div className="flex flex-col justify-between  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-8 pt-2 bg-fk-background/90 overflow-hidden">
-      <Header showBackButton />
+      <Header showBackButton showMenuButton />
       <section className="flex flex-col max-w-screen min-h-dvh overflow-scroll pb-30">
         <h2 className="text-fk-primary font-extrabold text-xl text-center">
           Sobre o Feira-Kit

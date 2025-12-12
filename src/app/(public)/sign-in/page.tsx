@@ -10,14 +10,18 @@ import {
 } from "@/app/utils/toasthelper";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Header } from "@/app/components/header";
 import { useSignIn } from "@/hooks/users/useSignIn";
+import { useOnboardingStore } from "@/stores/useOnboardingStore";
+import { OnBoarding } from "../onBoarding/OnBoarding";
 
 export default function SignIn() {
+  const { hasSeenOnboarding, hydrate } = useOnboardingStore();
+  const [hydrated, setHydrated] = useState(false);
   const setUsuario = useAuthStore((state) => state.setUsuario);
   const setToken = useAuthStore((state) => state.setToken);
   const [email, setEmail] = useState<string>("");
@@ -103,6 +107,17 @@ export default function SignIn() {
       },
     });
   };
+
+  useEffect(() => {
+    hydrate();
+    setHydrated(true);
+  }, [hydrate]);
+
+  if (!hydrated) return null;
+
+  if (!hasSeenOnboarding) {
+    return <OnBoarding />;
+  }
 
   return (
     <div className="flex flex-col min-h-dvh h-dvh bg-fk-background/90 w-screen px-6">

@@ -7,14 +7,19 @@ import { DrawerButton } from "./drawerButton";
 type HeaderProps = {
   showBackButton: boolean;
   showMenuButton?: boolean;
+  backToHome?: boolean;
 };
 
-export function Header({ showBackButton, showMenuButton }: HeaderProps) {
+export function Header({
+  showBackButton,
+  showMenuButton,
+  backToHome,
+}: HeaderProps) {
   return (
     <header className="w-full h-16 flex items-center justify-center relative">
       {showBackButton && (
         <div className="absolute left-0">
-          <BackButton />
+          <BackButton backtoHome={backToHome ? backToHome : false} />
         </div>
       )}
       <div>

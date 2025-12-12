@@ -22,7 +22,7 @@ export default function MyProducts() {
 
   return (
     <div className="flex flex-col  items-center min-h-dvh h-dvh max-h-dvh w-screen max-w-screen px-6 pt-2 pb-1 bg-fk-background/90">
-      <Header showBackButton showMenuButton />
+      <Header showBackButton showMenuButton backToHome />
       <div className="w-full h-full pt-2 flex flex-col gap-2 items-start">
         <h2 className="text-xl text-gray-600/70 font-bold">Meus Produtos</h2>
         <AddNewProduct />

@@ -133,13 +133,13 @@ export default function CreateProduct() {
             </FormProvider>
           )}
 
-          <div className="flex gap-2 w-full p-6 justify-center">
+          <div className="flex w-full gap-2 pb-4">
             {step > 1 && (
               <button
                 onClick={() => setStep(step - 1)}
-                className="flex w-4/12 h-10 items-center gap-1 text-fk-primary"
+                className="w-1/6 h-12 py-3 bg-fk-primary text-white font-semibold  flex justify-center items-center rounded-full"
               >
-                <FaArrowLeft /> Voltar
+                <FaArrowLeft />
               </button>
             )}
 
@@ -149,7 +149,7 @@ export default function CreateProduct() {
                   ? handleNextStep
                   : methods.handleSubmit(handleSubmitForm)
               }
-              className="w-full h-10 rounded-md bg-fk-primary text-fk-background font-bold"
+              className="w-full h-12 rounded-md bg-fk-primary text-fk-background font-bold"
             >
               {step !== steps.length ? "Continuar" : "finalizar"}
             </button>
