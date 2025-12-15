@@ -30,6 +30,7 @@ export function useCreateUser() {
       setUsuario(data.usuario);
       setToken(data.token);
       toastWellcome();
+      router.refresh();
       router.replace("/");
     },
     onError: () => {
