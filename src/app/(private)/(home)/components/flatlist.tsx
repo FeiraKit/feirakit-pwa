@@ -17,7 +17,7 @@ export function FlatList({
   isFetchingNextPage,
 }: FlatListProps) {
   return (
-    <div className="w-full max-w-lg grid grid-cols-2 mt-4 mb-2  gap-2  flex-wrap overflow-y-auto h-full  pb-30 scrollbar-none">
+    <div className="w-full max-w-lg grid grid-cols-2 mt-4 mb-2  gap-2  flex-wrap overflow-y-auto h-full  pb-30 scrollbar-none  lg:grid-cols-3 lg:max-w-full lg:gap-4">
       {products.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}

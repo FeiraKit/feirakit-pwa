@@ -104,18 +104,22 @@ export function Feed() {
 
   return (
     <>
-      <div className="w-full flex items-center-safe justify-between max-w-lg gap-3">
-        <SearchProductInput
-          LeftIcon={<FaSearch />}
-          value={searchTerm}
-          onChange={handleSearchTerm}
-          placeholder="Pesquisar"
-        />
+      <div className="w-full max-w-lg lg:max-w-full lg:flex lg:flex-row-reverse lg:justify-between lg:items-start lg:gap-2">
+        <div className="w-full flex items-center-safe justify-between gap-3 lg:w-2/3">
+          <SearchProductInput
+            LeftIcon={<FaSearch />}
+            value={searchTerm}
+            onChange={handleSearchTerm}
+            placeholder="Pesquisar"
+          />
+        </div>
+        <div className="lg:w-1/3">
+          <SelectCity
+            currentCity={selectedCity}
+            setCurrentCity={getUrlSearchCity}
+          />
+        </div>
       </div>
-      <SelectCity
-        currentCity={selectedCity}
-        setCurrentCity={getUrlSearchCity}
-      />
       {!isOnline && <ErrorMessage message={"sem conexão com a internet"} />}
       {error && isOnline && <ErrorMessage message={error.message} />}
 

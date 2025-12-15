@@ -23,16 +23,18 @@ export function Header({
           <BackButton backtoHome={backToHome ? backToHome : false} />
         </div>
       )}
-      <Link href={"/"}>
-        <Image
-          className="drop-shadow-md contrast-100"
-          src="/logo.png"
-          alt="Feira Kit"
-          width={180}
-          height={38}
-          priority
-        />
-      </Link>
+      <div>
+        <Link href={"/"}>
+          <Image
+            className="drop-shadow-md contrast-100"
+            src="/logo.png"
+            alt="Feira Kit"
+            width={180}
+            height={38}
+            priority
+          />
+        </Link>
+      </div>
 
       {showMenuButton && <DrawerButton />}
     </header>

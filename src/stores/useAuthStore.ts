@@ -23,17 +23,37 @@ type AuthState = {
   token: string | null;
   setUsuario: (usuario: User | null) => void;
   setToken: (token: string | null) => void;
+  isAuthenticated: () => boolean;
+  validateSession: () => void;
+
   logout: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       usuario: null,
       token: null,
       setUsuario: (usuario) => set({ usuario }),
       setToken: (token) => set({ token }),
-      logout: () => set({ usuario: null, token: null }),
+      isAuthenticated: () => {
+        const { token, usuario } = get();
+        return !!token && !!usuario;
+      },
+      validateSession: () => {
+        const { token, usuario, logout } = get();
+        if (!token || !usuario) {
+          logout();
+        }
+      },
+
+      logout: async () => {
+        await fetch("/api/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+        set({ usuario: null, token: null });
+      },
     }),
     {
       name: "auth-storage", // chave no localStorage

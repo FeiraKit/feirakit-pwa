@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import { CoreProvider } from "./components/core-provider";
 import { DrawerMenu } from "./components/sideMenu/drawerMenu";
+import { AuthGuard } from "./components/AuthGuard";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
       </head>
 
       <body className={`${montserrat.variable} antialiased font-sans`}>
+        <AuthGuard />
         <CoreProvider>{children}</CoreProvider>
         <DrawerMenu />
         <ToastContainer

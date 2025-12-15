@@ -84,7 +84,7 @@ export function SelectCity({ currentCity, setCurrentCity }: SelectCityProps) {
       </div>
 
       {showList && (
-        <div className="w-full flex flex-col items-start-safe justify-between max-w-lg text-lg gap-1 border border-t-0  border-fk-primary/30 mt-2 max-h-50 overflow-y-scroll px-2 pb-4  rounded-b-md">
+        <div className="w-full flex flex-col items-start-safe justify-between max-w-lg text-lg gap-1 border border-t-0  border-fk-primary/30 mt-2 max-h-50 overflow-y-scroll px-2 pb-4  rounded-b-md lg:max-w-full lg:scrollbar lg:scrollbar-thumb-fk-primary/60  lg:scroll-smooth">
           <div
             className="absolute top-0 right-0"
             onClick={() => setShowList(false)}

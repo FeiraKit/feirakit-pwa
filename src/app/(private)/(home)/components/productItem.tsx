@@ -22,8 +22,8 @@ type ProductItemProps = {
 export function ProductItem({ product }: ProductItemProps) {
   return (
     <Link href={`/product/${product.id}`}>
-      <div className="rounded-lg shadow-md overflow-hidden mb-4 text-black  border p-2 pb-4 border-fk-primary/60 gap-2  flex flex-col h-80 justify-between">
-        <div className="relative w-full h-40 self-center flex items-center justify-center">
+      <div className="rounded-lg shadow-md overflow-hidden mb-4 text-black  border p-2 pb-4 border-fk-primary/60 gap-2  flex flex-col h-80 md:h-96 justify-between">
+        <div className="relative w-full h-40 lg:h-80 self-center flex items-center justify-center">
           <Image
             className="object-cover rounded-sm "
             src={product.imagem_url[0]}

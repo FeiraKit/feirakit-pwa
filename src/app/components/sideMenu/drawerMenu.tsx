@@ -66,11 +66,6 @@ export function DrawerMenu() {
   const user = useAuthStore((state) => state.usuario);
   const router = useRouter();
   const logOut = useAuthStore((state) => state.logout);
-  if (!open || !user) return null;
-
-  const firtsName = user.nome.split(" ")[0];
-  const secondName = user.nome.split(" ")[1] || "";
-  const currentUserName = firtsName + " " + secondName;
 
   const handleOnClickLogOut = async () => {
     const confirmLogOut = window.confirm("Tem certeza que deseja sair? ");
@@ -83,6 +78,35 @@ export function DrawerMenu() {
       logOut();
     }
   };
+  if (!open) return;
+
+  if (!user) {
+    return (
+      <div>
+        <div
+          className="fixed inset-0 h-dvh max-h-dvh bg-black/40"
+          onClick={toggleDrawer}
+          aria-hidden="true"
+        />
+        <div
+          className={`flex flex-col fixed top-0 right-0 h-dvh min-h-0 bg-fk-background text-white 
+    w-2/3  transition-transform duration-300 
+    ${open ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <button className="flex justify-center" onClick={handleOnClickLogOut}>
+            <p className="p-2 text-gray-700 active:text-fk-primary/60">
+              <FaSignOutAlt className="inline mr-2 h-6 w-6 text-red-900" />
+              Sair
+            </p>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const firtsName = user.nome.split(" ")[0];
+  const secondName = user.nome.split(" ")[1] || "";
+  const currentUserName = firtsName + " " + secondName;
 
   return (
     <div>

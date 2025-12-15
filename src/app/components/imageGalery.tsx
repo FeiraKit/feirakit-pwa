@@ -12,8 +12,8 @@ export function ImageGalery({ product }: ImageGaleryProps) {
   const [thumb, setThumb] = useState<string>(productImages[0]);
 
   return (
-    <div className="w-full max-w-3xl mb-4">
-      <div className="w-full flex justify-center mb-2 h-44 max-h-44 ">
+    <div className="w-full max-w-full mb-4">
+      <div className="w-full flex justify-center mb-2 h-44 max-h-44 lg:h-72 lg:max-h-72">
         <Image
           alt="imagem do produto"
           src={thumb}
@@ -22,7 +22,7 @@ export function ImageGalery({ product }: ImageGaleryProps) {
           className="object-contain rounded-md "
         />
       </div>
-      <div className="flex rounded-lg overflow-x-auto space-x-4 p-2  scrollbar-hide justify-center">
+      <div className="flex rounded-lg overflow-x-auto space-x-4 p-2 justify-center">
         {productImages.map((imageUrl: string, index: number) => (
           <div
             key={index}
