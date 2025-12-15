@@ -75,7 +75,7 @@ export default function SignIn() {
         setToken(data.token);
         setIsLoading(false);
         toastWellcome();
-        router.refresh();
+        window.location.href = "/";
       },
       onError: (e) => {
         console.log(e);
