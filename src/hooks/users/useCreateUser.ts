@@ -30,7 +30,7 @@ export function useCreateUser() {
       setUsuario(data.usuario);
       setToken(data.token);
       toastWellcome();
-      router.push("/");
+      router.replace("/");
     },
     onError: () => {
       toastWrongCredentials("tivemos um problema ao criar o usuário");

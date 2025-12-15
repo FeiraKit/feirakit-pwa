@@ -75,7 +75,7 @@ export default function SignIn() {
         setToken(data.token);
         setIsLoading(false);
         toastWellcome();
-        router.push("/");
+        router.replace("/");
       },
       onError: (e) => {
         console.log(e);
