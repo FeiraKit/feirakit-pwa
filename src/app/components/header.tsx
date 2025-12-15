@@ -3,6 +3,7 @@ import Image from "next/image";
 import BackButton from "./backButon";
 
 import { DrawerButton } from "./drawerButton";
+import Link from "next/link";
 
 type HeaderProps = {
   showBackButton: boolean;
@@ -22,7 +23,7 @@ export function Header({
           <BackButton backtoHome={backToHome ? backToHome : false} />
         </div>
       )}
-      <div>
+      <Link href={"/"}>
         <Image
           className="drop-shadow-md contrast-100"
           src="/logo.png"
@@ -31,7 +32,7 @@ export function Header({
           height={38}
           priority
         />
-      </div>
+      </Link>
 
       {showMenuButton && <DrawerButton />}
     </header>
