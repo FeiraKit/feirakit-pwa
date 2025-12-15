@@ -3,6 +3,7 @@ import { Header } from "@/app/components/header";
 import { Feed } from "./components/feed";
 import InstallPWAButton from "@/app/components/installPwaButton";
 import { Suspense } from "react";
+import { UseLoginToast } from "@/hooks/useLoginToast";
 
 export default function SignIn() {
   return (
@@ -10,7 +11,7 @@ export default function SignIn() {
       <Header showBackButton={false} showMenuButton />
       <Suspense>
         <InstallPWAButton />
-
+        <UseLoginToast />
         <Feed />
       </Suspense>
     </div>

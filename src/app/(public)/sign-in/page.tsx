@@ -5,14 +5,13 @@ import Input from "@/app/components/Input";
 import {
   toastEmptyField,
   toastInfo,
-  toastWellcome,
   toastWrongCredentials,
 } from "@/app/utils/toasthelper";
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
+
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Header } from "@/app/components/header";
 import { useSignIn } from "@/hooks/users/useSignIn";
@@ -27,7 +26,6 @@ export default function SignIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -74,8 +72,7 @@ export default function SignIn() {
         setUsuario(data.usuario);
         setToken(data.token);
         setIsLoading(false);
-        toastWellcome();
-        window.location.href = "/";
+        window.location.href = "/?login=success";
       },
       onError: (e) => {
         console.log(e);

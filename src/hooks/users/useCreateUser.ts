@@ -2,14 +2,13 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { createUser } from "@/sevices/userService";
-import { toastWellcome, toastWrongCredentials } from "@/app/utils/toasthelper";
+import { toastWrongCredentials } from "@/app/utils/toasthelper";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useRouter } from "next/navigation";
 
 export function useCreateUser() {
   const setUsuario = useAuthStore((state) => state.setUsuario);
   const setToken = useAuthStore((state) => state.setToken);
-  const router = useRouter();
+
   return useMutation({
     mutationFn: createUser,
     onSuccess: async (data) => {
@@ -29,8 +28,7 @@ export function useCreateUser() {
 
       setUsuario(data.usuario);
       setToken(data.token);
-      toastWellcome();
-      window.location.href = "/";
+      window.location.href = "/?login=success";
     },
     onError: () => {
       toastWrongCredentials("tivemos um problema ao criar o usuário");
