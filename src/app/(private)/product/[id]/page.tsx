@@ -1,6 +1,7 @@
 "use client";
 import { Header } from "@/app/components/header";
 import { ImageGalery } from "@/app/components/imageGalery";
+import { ProductDetailsSkeleton } from "@/app/components/loadings/skeleton";
 import { QuantitySelector } from "@/app/components/quantitySelector";
 import { WhatsappButton } from "@/app/components/whatsappButton";
 import { useProductById } from "@/hooks/useProductById";
@@ -65,11 +66,11 @@ export default function ProductPage() {
       >
         <Header showBackButton />
       </div>
-      {loading && <p>Carregando...</p>}
+      {loading && <ProductDetailsSkeleton />}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && product && !product?.seller?.name && (
-        <h2 className="text-red-700 text-2xl font-bold text-center">
-          Produto Indisponível
+        <h2 className="text-gray-500 text-2xl font-bold text-center">
+          Anúncio pausado
         </h2>
       )}
       {product && (
@@ -137,10 +138,15 @@ export default function ProductPage() {
               quantity={quantity}
               unityType={product.unidade}
             />
-
-            <div className="mt-6 mb-10 w-full">
-              <WhatsappButton quantity={quantity} product={product} />
-            </div>
+            {!loading && product && !product?.seller?.name ? (
+              <h2 className="text-gray-500 text-2xl font-bold text-center">
+                Anúncio pausado
+              </h2>
+            ) : (
+              <div className="mt-6 mb-10 w-full">
+                <WhatsappButton quantity={quantity} product={product} />
+              </div>
+            )}
           </main>
         </>
       )}

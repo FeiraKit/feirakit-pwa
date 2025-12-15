@@ -66,6 +66,29 @@ export function CreateProductSkeleton() {
   );
 }
 
+export function ProductDetailsSkeleton() {
+  return (
+    <div className="w-full max-w-lg flex flex-col mt-12 mb-2  gap-3  flex-wrap overflow-y-hidem h-dvh">
+      <Skeleton className="w-2/3 h-72 self-center" />
+      <div className="flex w-full itens-center justify-center gap-2">
+        <Skeleton className="w-12 h-12 self-center" duration="3.2s" />
+        <Skeleton className="w-12 h-12 self-center" duration="3.0s" />
+        <Skeleton className="w-12 h-12 self-center" duration="3.2s" />
+        <Skeleton className="w-12 h-12 self-center" duration="3.4s" />
+      </div>
+      <div className="flex w-full itens-center justify-between gap-2">
+        <Skeleton className="w-4/6 h-12 self-center" duration="3.2s" />
+        <Skeleton className="w-2/6 h-12 self-center" duration="3.2s" />
+      </div>
+      <Skeleton className="w-full h-12 self-center" duration="3.2s" />
+      <Skeleton
+        className="flex w-full flex-1 self-center mt-1"
+        duration="3.2s"
+      />
+    </div>
+  );
+}
+
 export function MyProfileSkeleton() {
   return (
     <div className="w-full max-w-lg flex flex-col mt-4 mb-2  gap-3  flex-wrap overflow-y-hidem h-dvh">

@@ -43,6 +43,18 @@ export function updateUser(data: updtateUserDTO) {
   );
 }
 
+export function deleteUser(id: string) {
+  const toDelete = { id: id };
+  return api<changePasswordResponse>(
+    "/users",
+    {
+      method: "delete",
+      body: JSON.stringify(toDelete),
+    },
+    30000
+  );
+}
+
 export function changePassword(data: changePasswordDTO) {
   return api<changePasswordResponse>(
     "/users/change-password",

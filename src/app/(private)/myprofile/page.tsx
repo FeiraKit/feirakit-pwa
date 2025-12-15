@@ -16,11 +16,17 @@ import {
   FaEdit,
   FaKey,
   FaMap,
-  FaRegStickyNote,
+  FaMapPin,
   FaStreetView,
   FaWhatsapp,
 } from "react-icons/fa";
-import { FaHouse, FaLocationDot, FaTreeCity, FaUser } from "react-icons/fa6";
+import {
+  FaHouse,
+  FaLocationDot,
+  FaTreeCity,
+  FaUser,
+  FaUserXmark,
+} from "react-icons/fa6";
 import { PatternFormat } from "react-number-format";
 
 export default function MyProducts() {
@@ -109,13 +115,20 @@ export default function MyProducts() {
             </button>
           </div>
 
-          <div className="w-full flex justify-end px-2 mt-1">
+          <div className="w-full flex justify-between px-2 mt-1">
             <Link
               href="/myprofile/changepassword"
               className="text-sm flex items-center gap-1 text-fk-primary font-semibold hover:underline"
             >
               <FaKey className="h-4 w-4" />
               Alterar senha
+            </Link>
+            <Link
+              href="/myprofile/deleteAccount"
+              className="text-sm flex items-center gap-1 text-fk-error-text font-semibold hover:underline"
+            >
+              <FaUserXmark className="h-4 w-4" />
+              Apagar minha conta
             </Link>
           </div>
 
@@ -228,7 +241,7 @@ export default function MyProducts() {
               </div>
 
               <div className="flex w-full gap-2  p-2 items-center">
-                <FaRegStickyNote
+                <FaMapPin
                   className={isUpdateMode ? "text-fk-primary" : "text-gray-500"}
                 />
                 <input
